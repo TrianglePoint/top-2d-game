@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Top2dGame.Model", "Top2dGame.Model\Top2dGame.Model.csproj", "{5FCB3875-925A-48AD-8DE2-60CF72E76B4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Top2dGame.Client", "Top2dGame.Client\Top2dGame.Client.csproj", "{EDCB841A-411E-405A-98F9-546CB087E7C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5FCB3875-925A-48AD-8DE2-60CF72E76B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FCB3875-925A-48AD-8DE2-60CF72E76B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FCB3875-925A-48AD-8DE2-60CF72E76B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FCB3875-925A-48AD-8DE2-60CF72E76B4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDCB841A-411E-405A-98F9-546CB087E7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDCB841A-411E-405A-98F9-546CB087E7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDCB841A-411E-405A-98F9-546CB087E7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDCB841A-411E-405A-98F9-546CB087E7C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F6885CD8-B2E5-4BF6-802A-C6734696C3AC}
+	EndGlobalSection
+EndGlobal
