@@ -54,12 +54,12 @@ namespace Top2dGame.InputMaster.GameController
 
 				if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp))
 				{
-					Character.Y += ONE_PIXEL;
+					Character.Y -= ONE_PIXEL;
 				}
 
 				if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown))
 				{
-					Character.Y -= ONE_PIXEL;
+					Character.Y += ONE_PIXEL;
 				}
 
 				if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))

@@ -1,8 +1,16 @@
-﻿namespace Top2dGame.Model.Existence
+﻿using Top2dGame.Model.Sprite;
+
+namespace Top2dGame.Model.Existence
 {
-	public class Terrain : IExistence
+	public class Terrain : Existence
 	{
-		public int X { get; set; }
-		public int Y { get; set; }
+		public Terrain() : this(0, 0) { }
+
+		public Terrain(int x, int y)
+		{
+			Sprite = (char)SpriteEnum.Wall;
+			X = x;
+			Y = y;
+		}
 	}
 }

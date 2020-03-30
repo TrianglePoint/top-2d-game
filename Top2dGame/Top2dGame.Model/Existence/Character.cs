@@ -1,14 +1,14 @@
-﻿namespace Top2dGame.Model.Existence
-{
-	public class Character : IExistence
-	{
-		public int X { get; set; }
-		public int Y { get; set; }
+﻿using Top2dGame.Model.Sprite;
 
-		public Character() : this(0, 0) {}
+namespace Top2dGame.Model.Existence
+{
+	public class Character : Existence
+	{
+		public Character() : this(0, 0) { }
 
 		public Character(int x, int y)
 		{
+			Sprite = (char)SpriteEnum.Player;
 			X = x;
 			Y = y;
 		}
