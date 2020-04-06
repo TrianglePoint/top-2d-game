@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Top2dGame.InputMaster
 {
+	// TODO Maybe, it is not used
     public class InputStorage
     {
 		private bool Up { get; set; }

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
+using Top2dGame.Client.Master;
 using Top2dGame.InputMaster.GameController;
-using Top2dGame.Model;
-using Top2dGame.Model.Existence;
+using Top2dGame.Model.GameObject;
 
 namespace Top2dGame.Client
 {
 	// TODO Need create Time class or Turn class
 	// TODO Process negative location
-	// TODO Show map on screen. ex) screen: (0, 0) -> map (2, 0)
 	// TODO Set boundary
 	// TODO Disable mouse click
 	public class TestThread
@@ -19,7 +17,7 @@ namespace Top2dGame.Client
 		/// <summary>
 		/// Player information
 		/// </summary>
-		private Character Character { get; set; }
+		private Character Player { get; set; }
 		/// <summary>
 		/// Process game Controller's input
 		/// </summary>
@@ -27,19 +25,24 @@ namespace Top2dGame.Client
 
 		public TestThread()
 		{
-			IList<Existence> spirteList = new List<Existence>();
+			GameMaster gameMaster = GameMaster.GetInstance();
 
-			Screen = new Screen(GetGameMap(), spirteList);
-			Character = new Character();
-			spirteList.Add(Character);
+			gameMaster.GameStart();
 
-			GameController = new GameController(Character);
+			// TODO Use other way (ex: import from file)
+			Screen = new Screen(0, 0, 20, 20);
+			Player = new Character();
+			// TODO Use other way (ex: import from file)
+			gameMaster.PlaceCharacter(Player, 2, 4);
+			GameController = new GameController(Player);
 			Thread = new Thread(new ThreadStart(ThreadProc));
 
-			Console.CursorVisible = false;
-			
+			Console.CursorVisible = false;			
 		}
 
+		/// <summary>
+		/// Thread proc
+		/// </summary>
 		private void ThreadProc()
 		{
 			int interval = FrameMaster.GetInverval(60);
@@ -49,38 +52,21 @@ namespace Top2dGame.Client
 			while (true)
 			{
 				Screen.Display();
+
+				// TODO Move to screen class
 				Console.SetCursorPosition(22, 22);
-				Console.WriteLine(string.Format("Location : {0}, {1}", Character.X, Character.Y));
+				Console.WriteLine(string.Format("Location : {0}, {1}", Player.GameTile.X.ToString("00"), Player.GameTile.Y.ToString("00")));
 
 				Thread.Sleep(interval);
 			}
 		}
 
+		/// <summary>
+		/// Start thread
+		/// </summary>
 		public void StartThread()
 		{
 			Thread.Start();
-		}
-
-		/// <summary>
-		/// Get game map (temp)
-		/// </summary>
-		/// <returns>Game map</returns>
-		private IList<Existence> GetGameMap()
-		{
-			// TODO Create game map class (sprite info storage)
-			IList<Existence> gameMap = new List<Existence>();
-			int w = 10;
-			int h = 10;
-
-			for (int y = 0; y < h; y++)
-			{
-				for (int x = 0; x < w; x++)
-				{
-					gameMap.Add(new Space(x, y));
-				}
-			}
-
-			return gameMap;
 		}
 	}
 }

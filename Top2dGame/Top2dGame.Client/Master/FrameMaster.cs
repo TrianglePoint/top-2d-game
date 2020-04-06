@@ -1,4 +1,4 @@
-﻿namespace Top2dGame.Model
+﻿namespace Top2dGame.Client.Master
 {
 	public static class FrameMaster
 	{
