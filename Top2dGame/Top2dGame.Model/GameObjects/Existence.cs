@@ -1,11 +1,11 @@
 ﻿using Top2dGame.Model.Container;
 
-namespace Top2dGame.Model.GameObject
+namespace Top2dGame.Model.GameObjects
 {
 	/// <summary>
 	/// It contain everything.
 	/// </summary>
-	public class Existence
+	public abstract class Existence
 	{
 		/// <summary>
 		/// Sprite displayed on the screen (Use SpriteEnum)

@@ -4,6 +4,7 @@
 	{
 		Player = '@',
 		Wall = '#',
-		Space = '_'
+		Space = '_',
+		Stair = '%'
 	}
 }

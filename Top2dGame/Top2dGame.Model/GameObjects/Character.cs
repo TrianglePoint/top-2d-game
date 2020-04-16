@@ -1,6 +1,6 @@
 ﻿using Top2dGame.Model.Sprite;
 
-namespace Top2dGame.Model.GameObject
+namespace Top2dGame.Model.GameObjects
 {
 	public class Character : Existence
 	{

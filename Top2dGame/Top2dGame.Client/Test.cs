@@ -2,7 +2,7 @@
 using System.Threading;
 using Top2dGame.Client.Master;
 using Top2dGame.InputMaster.GameController;
-using Top2dGame.Model.GameObject;
+using Top2dGame.Model.GameObjects;
 
 namespace Top2dGame.Client
 {

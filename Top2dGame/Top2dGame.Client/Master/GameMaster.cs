@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Model.Container;
-using Top2dGame.Model.GameObject;
+using Top2dGame.Model.GameObjects;
+using Top2dGame.Model.GameObjects.Terrains;
 
 namespace Top2dGame.Client.Master
 {
@@ -39,30 +40,7 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		public void GameStart()
 		{
-			// TODO Create Map info file
-			int width = 20;
-			int height = 20;
-
-			CreateGameMap(width, height);
-		}
-
-		/// <summary>
-		/// Create game map
-		/// </summary>
-		/// <param name="horizontal">Map size</param>
-		/// <param name="vertical">Map size</param>
-		private void CreateGameMap(int horizontal, int vertical)
-		{
-			GameMap = new List<GameTile>();
-			for (int x = 0; x < horizontal; x++)
-			{
-				for (int y = 0; y < vertical; y++)
-				{
-					GameMap.Add(new GameTile(x, y));
-				}
-			}
-
-			CreaeSpace();
+			GameMap = MapMaster.GetInstance().GetGameMap("map1s");
 		}
 
 		/// <summary>
@@ -98,58 +76,58 @@ namespace Top2dGame.Client.Master
 		/// <param name="x">Location x</param>
 		/// <param name="y">Location y</param>
 		/// <returns>Placed game tile</returns>
-		private void CreaeSpace()
-		{
-			// TODO Use other way. (Random, import from file)
-			foreach (GameTile gameTile in GameMap)
-			{
-				gameTile.Space = new Space();
-			}
-		}
-
-		/// <summary>
-		/// Place character
-		/// </summary>
-		/// <param name="character">Character</param>
-		/// <param name="x">Location x</param>
-		/// <param name="y">Location y</param>
-		/// <returns>Placed game tile</returns>
 		public GameTile PlaceCharacter(Character character, int x, int y)
 		{
+			bool canPlace = true;
 			GameTile gameTile = GetGameTile(x, y);
 
 			if (gameTile == null)
 			{
 				// TODO Print text "Failed Init character" in textLog section
-				
-				return null;
-			}
 
-			if (gameTile.Space == null)
+				canPlace = false;
+			}
+			else if (gameTile.Space == null)
 			{
 				// TODO Print text "Character is must exist on space!" in textLog section
 
-				return null;
+				canPlace = false;
 			}
-
 			// TODO Process Terrain case. (if terrain is wall, can't place when usually)
-
-			if (gameTile.Character != null)
+			else if (gameTile.Terrain != null)
+			{
+				if (gameTile.Terrain is Wall)
+				{
+					canPlace = false;
+				}
+				else if (gameTile.Terrain is Stair stair)
+				{
+					canPlace = false;
+					// Move through stair
+					PlaceCharacter(character, stair.ToX, stair.ToY);
+				}
+			}
+			else if (gameTile.Character != null)
 			{
 				// TODO Print text "There is other character" in textLog section
 
-				return null;
+				canPlace = false;
 			}
 
-			gameTile.Character = character;
-
-			// Move from tile to other tile
-			if (character.GameTile != null)
+			if (canPlace)
 			{
-				character.GameTile.Character = null;
-			}
+				// Place character
+				gameTile.Character = character;
 
-			character.GameTile = gameTile;
+				// Move from tile to other tile
+				if (character.GameTile != null)
+				{
+					// Before location info
+					character.GameTile.Character = null;
+				}
+				// After location info
+				character.GameTile = gameTile;
+			}
 
 			return gameTile;
 		}

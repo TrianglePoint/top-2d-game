@@ -1,4 +1,4 @@
-﻿using Top2dGame.Model.GameObject;
+﻿using Top2dGame.Model.GameObjects;
 
 namespace Top2dGame.Model.Container
 {
