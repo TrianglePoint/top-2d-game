@@ -2,7 +2,6 @@
 using System.Threading;
 using Top2dGame.Client.Master;
 using Top2dGame.InputMaster.GameController;
-using Top2dGame.Model.GameObjects;
 
 namespace Top2dGame.Client
 {
@@ -12,12 +11,7 @@ namespace Top2dGame.Client
 	// TODO Disable mouse click
 	public class TestThread
 	{
-		private Screen Screen { get; set; }
 		private Thread Thread { get; set; }
-		/// <summary>
-		/// Player information
-		/// </summary>
-		private Character Player { get; set; }
 		/// <summary>
 		/// Process game Controller's input
 		/// </summary>
@@ -30,14 +24,13 @@ namespace Top2dGame.Client
 			gameMaster.GameStart();
 
 			// TODO Use other way (ex: import from file)
-			Screen = new Screen(0, 0, 20, 20);
-			Player = new Character();
+			Screen.GetInstance().SetSize(0, 0, 20, 20);
 			// TODO Use other way (ex: import from file)
-			gameMaster.PlaceCharacter(Player, 2, 4);
-			GameController = new GameController(Player);
+			gameMaster.PlaceCharacter(gameMaster.Player, 2, 4);
+			GameController = new GameController();
 			Thread = new Thread(new ThreadStart(ThreadProc));
 
-			Console.CursorVisible = false;			
+			Console.CursorVisible = false;
 		}
 
 		/// <summary>
@@ -51,11 +44,7 @@ namespace Top2dGame.Client
 
 			while (true)
 			{
-				Screen.Display();
-
-				// TODO Move to screen class
-				Console.SetCursorPosition(22, 22);
-				Console.WriteLine(string.Format("Location : {0}, {1}", Player.GameTile.X.ToString("00"), Player.GameTile.Y.ToString("00")));
+				Screen.GetInstance().Display();
 
 				Thread.Sleep(interval);
 			}

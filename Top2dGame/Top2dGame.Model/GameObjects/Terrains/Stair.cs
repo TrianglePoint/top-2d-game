@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Top2dGame.Model.Container;
-using Top2dGame.Model.Sprite;
+﻿using Top2dGame.Model.Sprite;
 
 namespace Top2dGame.Model.GameObjects.Terrains
 {
@@ -11,7 +9,7 @@ namespace Top2dGame.Model.GameObjects.Terrains
 		/// <summary>
 		/// To game map
 		/// </summary>
-		public IList<GameTile> ToGameMap { get; private set; }
+		public string ToGameMapName { get; private set; }
 		/// <summary>
 		/// To location X
 		/// </summary>
@@ -27,9 +25,9 @@ namespace Top2dGame.Model.GameObjects.Terrains
 		/// <param name="toGameMap"></param>
 		/// <param name="toX"></param>
 		/// <param name="toY"></param>
-		public Stair(IList<GameTile> toGameMap, int toX, int toY) : base()
+		public Stair(string toGameMapName, int toX, int toY) : base()
 		{
-			ToGameMap = toGameMap;
+			ToGameMapName = toGameMapName;
 			ToX = toX;
 			ToY = toY;
 		}

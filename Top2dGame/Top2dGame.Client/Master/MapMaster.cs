@@ -6,19 +6,37 @@ using Top2dGame.Model.GameObjects.Terrains;
 namespace Top2dGame.Client.Master
 {
 	/// <summary>
-	/// Map master (singleton)
+	/// Map master
 	/// </summary>
 	public sealed class MapMaster
 	{
 		/// <summary>
-		/// Instance (singleton)
+		/// Instance
 		/// </summary>
 		private static readonly MapMaster Instance = new MapMaster();
 
 		/// <summary>
+		/// Game maps
+		/// </summary>
+		public Dictionary<string, IList<GameTile>> GameMaps { get; set; }
+		
+		/// <summary>
+		/// Game tile list
+		/// </summary>
+		private IList<GameTile> CurrentGameMap { get; set; }
+
+		/// <summary>
 		/// Constructor
 		/// </summary>
-		private MapMaster() { }
+		private MapMaster()
+		{
+			GameMaps = new Dictionary<string, IList<GameTile>>
+			{
+				// TODO this is temp process. add load map from file.
+				{ "map1", CreateGameMap1(20, 20) },
+				{ "map2", CreateGameMap2(10, 15) }
+			};
+		}
 
 		/// <summary>
 		/// Get instance
@@ -29,17 +47,32 @@ namespace Top2dGame.Client.Master
 			return Instance;
 		}
 
-		public IList<GameTile> GetGameMap(string mapName)
+		/// <summary>
+		/// Get game map
+		/// </summary>
+		/// <param name="mapName">Map name</param>
+		/// <returns>Current game map</returns>
+		public IList<GameTile> GetMap(string mapName)
 		{
-			// TODO this is temp process. add load map from file.
-			if (mapName == "map1")
-			{
-				return CreateGameMap(20, 20);
-			}
-			else
-			{
-				return CreateGameMap(10, 15);
-			}
+			return GameMaps[mapName];
+		}
+
+		/// <summary>
+		/// Set current game map
+		/// </summary>
+		/// <param name="mapName">Map name</param>
+		public void SetCurrentMap(string mapName)
+		{
+			CurrentGameMap = GameMaps[mapName];
+		}
+
+		/// <summary>
+		/// Get current game map
+		/// </summary>
+		/// <returns>Current game map</returns>
+		public IList<GameTile> GetCurrentMap()
+		{
+			return CurrentGameMap;
 		}
 
 		// TODO import from file
@@ -49,7 +82,7 @@ namespace Top2dGame.Client.Master
 		/// <param name="horizontal">Map size</param>
 		/// <param name="vertical">Map size</param>
 		/// <returns>Game map</returns>
-		private IList<GameTile> CreateGameMap(int horizontal, int vertical)
+		private IList<GameTile> CreateGameMap1(int horizontal, int vertical)
 		{
 			IList<GameTile> gameMap = new List<GameTile>();
 			for (int x = 0; x < horizontal; x++)
@@ -65,7 +98,7 @@ namespace Top2dGame.Client.Master
 					{
 						gameMap.Add(new GameTile(x, y));
 					}
-					else if ((x == 2 && y == 1) || num != 0)
+					else if ((x == 1 && y == 2) || num != 0)
 					{
 						gameMap.Add(new GameTile(x, y));
 					}
@@ -78,11 +111,66 @@ namespace Top2dGame.Client.Master
 			{
 				if (gameTile.X == 0 && gameTile.Y == 0)
 				{
-					gameTile.Terrain = new Stair(gameMap, 2, 4);
+					gameTile.Terrain = new Stair("map2", 2, 4);
+				}
+				else if (gameTile.X == 1 && gameTile.Y == 2)
+				{
+					gameTile.Terrain = new Wall();
+				}
+			}
+
+			return gameMap;
+		}
+
+		// TODO import from file
+		/// <summary>
+		/// Create game map
+		/// </summary>
+		/// <param name="horizontal">Map size</param>
+		/// <param name="vertical">Map size</param>
+		/// <returns>Game map</returns>
+		private IList<GameTile> CreateGameMap2(int horizontal, int vertical)
+		{
+			IList<GameTile> gameMap = new List<GameTile>();
+			for (int x = 0; x < horizontal; x++)
+			{
+				for (int y = 0; y < vertical; y++)
+				{
+					int num = new System.Random().Next(10);
+					if ((x == 2 && y == 4) || num != 0)
+					{
+						gameMap.Add(new GameTile(x, y));
+					}
+					else if ((x == 6 && y == 6) || num != 0)
+					{
+						gameMap.Add(new GameTile(x, y));
+					}
+					else if ((x == 2 && y == 1) || num != 0)
+					{
+						gameMap.Add(new GameTile(x, y));
+					}
+					else if ((x == 5 && y == 5) || num != 0)
+					{
+						gameMap.Add(new GameTile(x, y));
+					}
+				}
+			}
+
+			CreaeSpace(gameMap);
+
+			foreach (GameTile gameTile in gameMap)
+			{
+				if (gameTile.X == 6 && gameTile.Y == 6)
+				{
+					gameTile.Terrain = new Stair("map1", 2, 4);
 				}
 				else if (gameTile.X == 2 && gameTile.Y == 1)
 				{
 					gameTile.Terrain = new Wall();
+				}
+				else if (gameTile.X == 5 && gameTile.Y == 5)
+				{
+					gameTile.Terrain = new Exit();
 				}
 			}
 

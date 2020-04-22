@@ -5,6 +5,7 @@
 		Player = '@',
 		Wall = '#',
 		Space = '_',
-		Stair = '%'
+		Stair = '%',
+		Exit = '&'
 	}
 }

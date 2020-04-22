@@ -2,7 +2,6 @@
 using System;
 using System.Threading;
 using Top2dGame.Client.Master;
-using Top2dGame.Model.GameObjects;
 
 namespace Top2dGame.InputMaster.GameController
 {
@@ -16,9 +15,8 @@ namespace Top2dGame.InputMaster.GameController
 		/// The thread for receive the input.
 		/// </summary>
 		private Thread InputThread { get; set; }
-		private Character Player { get; set; }
 
-		public GameController(Character player)
+		public GameController()
 		{
 			Controller = new Controller(UserIndex.One);
 
@@ -29,8 +27,6 @@ namespace Top2dGame.InputMaster.GameController
 
 				Environment.Exit(1);
 			}
-
-			Player = player;
 		}
 
 		/// <summary>
@@ -52,8 +48,8 @@ namespace Top2dGame.InputMaster.GameController
 
 			while (Controller.IsConnected)
 			{
-				int newX = Player.GameTile.X;
-				int newY = Player.GameTile.Y;
+				int newX = gameMaster.Player.GameTile.X;
+				int newY = gameMaster.Player.GameTile.Y;
 
 				Controller.GetState(out State state);
 
@@ -77,7 +73,7 @@ namespace Top2dGame.InputMaster.GameController
 					newX -= ONE_PIXEL;
 				}
 
-				gameMaster.PlaceCharacter(Player, newX, newY);
+				gameMaster.PlaceCharacter(gameMaster.Player, newX, newY);
 
 				Thread.Sleep(interval);
 			}

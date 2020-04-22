@@ -1,11 +1,20 @@
 ﻿using System;
 using Top2dGame.Client.Master;
 using Top2dGame.Model.Container;
+using Top2dGame.Model.GameObjects;
 
 namespace Top2dGame.Client
 {
-	public class Screen
+	/// <summary>
+	/// Screen
+	/// </summary>
+	public sealed class Screen
 	{
+		/// <summary>
+		/// Instance
+		/// </summary>
+		private static readonly Screen Instance = new Screen();
+
 		/// <summary>
 		/// Location X
 		/// </summary>
@@ -26,11 +35,25 @@ namespace Top2dGame.Client
 		/// <summary>
 		/// Constructor
 		/// </summary>
+		private Screen() { }
+
+		/// <summary>
+		/// Get instance
+		/// </summary>
+		/// <returns>Instance</returns>
+		public static Screen GetInstance()
+		{
+			return Instance;
+		}
+
+		/// <summary>
+		/// Set size
+		/// </summary>
 		/// <param name="x">Screen location</param>
 		/// <param name="y">Screen location</param>
 		/// <param name="width">Screen size</param>
 		/// <param name="height">Screen size</param>
-		public Screen(int x, int y, int width, int height)
+		public void SetSize(int x, int y, int width, int height)
 		{
 			X = x;
 			Y = y;
@@ -45,6 +68,16 @@ namespace Top2dGame.Client
 		{
 			GameMaster gameMaster = GameMaster.GetInstance();
 
+			if (gameMaster.IsGameClear)
+			{
+				// TODO Add game clear screen
+				Console.Clear();
+				Console.WriteLine("Game clear!");
+				Environment.Exit(0);
+
+				return;
+			}
+
 			for (int i = 0; i < Width; i++)
 			{
 				for (int j = 0; j < Height; j++)
@@ -57,6 +90,19 @@ namespace Top2dGame.Client
 					}
 				}
 			}
+
+			PrintPlayerLocation();
+		}
+
+		/// <summary>
+		/// Print player location
+		/// </summary>
+		private void PrintPlayerLocation()
+		{
+			Character player = GameMaster.GetInstance().Player;
+
+			Console.SetCursorPosition(22, 22);
+			Console.WriteLine(string.Format("Location : {0}, {1}", player.GameTile.X.ToString("00"), player.GameTile.Y.ToString("00")));
 		}
 
 		/// <summary>
@@ -81,6 +127,14 @@ namespace Top2dGame.Client
 			{
 				Console.Write(gameTile.Space.Sprite);
 			}
+		}
+
+		/// <summary>
+		/// Clear screen
+		/// </summary>
+		public void ClearScreen()
+		{
+			Console.Clear();
 		}
 	}
 }
