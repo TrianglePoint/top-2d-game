@@ -24,13 +24,21 @@ namespace Top2dGame.Client
 		/// </summary>
 		private int Y { get; set; }
 		/// <summary>
-		/// Screen width
+		/// Sight width from location X
 		/// </summary>
-		private int Width { get; set; }
+		private int SightWidth { get; set; }
 		/// <summary>
-		/// Screen height
+		/// Sight height from location Y
 		/// </summary>
-		private int Height { get; set; }
+		private int SightHeight { get; set; }
+		/// <summary>
+		/// Range that does not chase player
+		/// </summary>
+		private int NotChaseWidth { get; set; }
+		/// <summary>
+		/// Range that does not chase player
+		/// </summary>
+		private int NotChaseHeight { get; set; }
 
 		/// <summary>
 		/// Constructor
@@ -51,14 +59,18 @@ namespace Top2dGame.Client
 		/// </summary>
 		/// <param name="x">Screen location</param>
 		/// <param name="y">Screen location</param>
-		/// <param name="width">Screen size</param>
-		/// <param name="height">Screen size</param>
-		public void SetSize(int x, int y, int width, int height)
+		/// <param name="sightWidth">Screen size</param>
+		/// <param name="sightHeight">Screen size</param>
+		/// <param name="notChaseWidth">Range that does not chase player</param>
+		/// <param name="notChaseHeight">Range that does not chase player</param>
+		public void SetSize(int x, int y, int sightWidth, int sightHeight, int notChaseWidth, int notChaseHeight)
 		{
 			X = x;
 			Y = y;
-			Width = width;
-			Height = height;
+			SightWidth = sightWidth;
+			SightHeight = sightHeight;
+			NotChaseWidth = notChaseWidth;
+			NotChaseHeight = notChaseHeight;
 		}
 
 		/// <summary>
@@ -78,20 +90,67 @@ namespace Top2dGame.Client
 				return;
 			}
 
-			for (int i = 0; i < Width; i++)
+			ChasePlayer(gameMaster.Player.GameTile);
+
+			// Show screen as Screen location and sight
+			for (int i = 0, x = X - SightWidth; i < SightWidth * 2 + 1; i++, x++)
 			{
-				for (int j = 0; j < Height; j++)
+				for (int j = 0, y = Y - SightHeight; j < SightHeight * 2 + 1; j++, y++)
 				{
-					GameTile gameTile = gameMaster.GetGameTile(X + i, Y + j);
+					GameTile gameTile = gameMaster.GetGameTile(x, y);
 
 					if (gameTile != null)
 					{
 						PrintData(gameTile, i, j);
 					}
+					else
+					{
+						PrintEmpty(i, j);
+					}
 				}
 			}
 
 			PrintPlayerLocation();
+		}
+
+		/// <summary>
+		/// Chase player
+		/// </summary>
+		/// <param name="playerGameTile">player game tile</param>
+		private void ChasePlayer(GameTile playerGameTile)
+		{
+			GameMaster gameMaster = GameMaster.GetInstance();
+
+			// Screen should chase player on x-axis
+			if (gameMaster.GetDistance(X, playerGameTile.X) > NotChaseWidth)
+			{
+				// Player is on the right of screen
+				if (playerGameTile.X - X > 0)
+				{
+					X = playerGameTile.X - NotChaseWidth;
+				}
+				// Player is on the left of screen
+				else
+				{
+					X = playerGameTile.X + NotChaseWidth;
+				}
+
+			}
+			// Screen should chase player on y-axis
+			if (gameMaster.GetDistance(Y, playerGameTile.Y) > NotChaseHeight)
+			{
+				// Player is on the bottom of screen
+				if (playerGameTile.Y - Y > 0)
+				{
+					Y = playerGameTile.Y - NotChaseWidth;
+				}
+				// Player is on the top of screen
+				else
+				{
+					Y = playerGameTile.Y + NotChaseWidth;
+				}
+
+			}
 		}
 
 		/// <summary>
@@ -101,7 +160,7 @@ namespace Top2dGame.Client
 		{
 			Character player = GameMaster.GetInstance().Player;
 
-			Console.SetCursorPosition(22, 22);
+			Console.SetCursorPosition(0, SightHeight * 2 + 2);
 			Console.WriteLine(string.Format("Location : {0}, {1}", player.GameTile.X.ToString("00"), player.GameTile.Y.ToString("00")));
 		}
 
@@ -111,7 +170,7 @@ namespace Top2dGame.Client
 		/// <param name="gameTile">Game tile</param>
 		/// <param name="left">Print location x</param>
 		/// <param name="top">Print location y</param>
-		public void PrintData(GameTile gameTile, int left, int top)
+		private void PrintData(GameTile gameTile, int left, int top)
 		{
 			Console.SetCursorPosition(left, top);
 			
@@ -130,11 +189,18 @@ namespace Top2dGame.Client
 		}
 
 		/// <summary>
-		/// Clear screen
+		/// Print empty.
 		/// </summary>
-		public void ClearScreen()
+		/// <param name="left">Print location x</param>
+		/// <param name="top">Print location y</param>
+		private void PrintEmpty(int left, int top)
 		{
-			Console.Clear();
+			// TODO Move to const file.
+			const char EMPTY = ' ';
+
+			Console.SetCursorPosition(left, top);
+
+			Console.Write(EMPTY);
 		}
 	}
 }

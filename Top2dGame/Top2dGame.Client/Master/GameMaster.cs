@@ -191,7 +191,6 @@ namespace Top2dGame.Client.Master
 				if (mapName != "")
 				{
 					MapMaster.GetInstance().SetCurrentMap(mapName);
-					Screen.GetInstance().ClearScreen();
 				}
 			}
 
@@ -204,6 +203,17 @@ namespace Top2dGame.Client.Master
 		private void GameClear()
 		{
 			IsGameClear = true;
+		}
+
+		/// <summary>
+		/// Get distance
+		/// </summary>
+		/// <param name="a">Location a</param>
+		/// <param name="b">Location b</param>
+		/// <returns>Distance</returns>
+		public int GetDistance(int a, int b)
+		{
+			return System.Math.Abs(a - b);
 		}
 	}
 }
