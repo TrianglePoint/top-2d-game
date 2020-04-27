@@ -134,14 +134,14 @@ namespace Top2dGame.Client.Master
 
 			if (gameTile == null)
 			{
-				// TODO Print text "Failed Init character" in textLog section
-
+				// TODO Get text from const file
+				LogMaster.GetInstance().WriteLog("There is nothing.");
 				canPlace = false;
 			}
 			else if (gameTile.Space == null)
 			{
-				// TODO Print text "Character is must exist on space!" in textLog section
-
+				// TODO Get text from const file
+				LogMaster.GetInstance().WriteLog("Character is must exist on space!");
 				canPlace = false;
 			}
 			// TODO Process Terrain case. (if terrain is wall, can't place when usually)
@@ -149,10 +149,12 @@ namespace Top2dGame.Client.Master
 			{
 				if (gameTile.Terrain is Wall)
 				{
+					LogMaster.GetInstance().WriteLog("There is wall.");
 					canPlace = false;
 				}
 				else if (gameTile.Terrain is Stair stair)
 				{
+					LogMaster.GetInstance().WriteLog("Move to : " + stair.ToGameMapName);
 					canPlace = false;
 					// Move through stair
 					PlaceCharacter(character, stair.ToX, stair.ToY, stair.ToGameMapName);
@@ -168,8 +170,8 @@ namespace Top2dGame.Client.Master
 			}
 			else if (gameTile.Character != null)
 			{
-				// TODO Print text "There is other character" in textLog section
-
+				// TODO Get text from const file
+				LogMaster.GetInstance().WriteLog("There is other character");
 				canPlace = false;
 			}
 

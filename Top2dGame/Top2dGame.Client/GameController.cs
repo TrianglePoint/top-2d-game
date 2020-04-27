@@ -45,9 +45,10 @@ namespace Top2dGame.InputMaster.GameController
 
 			GameMaster gameMaster = GameMaster.GetInstance();
 			int interval = FrameMaster.GetInverval(10);
-
+			
 			while (Controller.IsConnected)
 			{
+				bool inputted = false;
 				int newX = gameMaster.Player.GameTile.X;
 				int newY = gameMaster.Player.GameTile.Y;
 
@@ -55,25 +56,32 @@ namespace Top2dGame.InputMaster.GameController
 
 				if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp))
 				{
+					inputted = true;
 					newY -= ONE_PIXEL;
 				}
 
 				if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown))
 				{
+					inputted = true;
 					newY += ONE_PIXEL;
 				}
 
 				if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
 				{
+					inputted = true;
 					newX += ONE_PIXEL;
 				}
 
 				if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
 				{
+					inputted = true;
 					newX -= ONE_PIXEL;
 				}
 
-				gameMaster.PlaceCharacter(gameMaster.Player, newX, newY);
+				if (inputted)
+				{
+					gameMaster.PlaceCharacter(gameMaster.Player, newX, newY);
+				}
 
 				Thread.Sleep(interval);
 			}

@@ -111,6 +111,8 @@ namespace Top2dGame.Client
 			}
 
 			PrintPlayerLocation();
+
+			PrintLog();
 		}
 
 		/// <summary>
@@ -154,17 +156,6 @@ namespace Top2dGame.Client
 		}
 
 		/// <summary>
-		/// Print player location
-		/// </summary>
-		private void PrintPlayerLocation()
-		{
-			Character player = GameMaster.GetInstance().Player;
-
-			Console.SetCursorPosition(0, SightHeight * 2 + 2);
-			Console.WriteLine(string.Format("Location : {0}, {1}", player.GameTile.X.ToString("00"), player.GameTile.Y.ToString("00")));
-		}
-
-		/// <summary>
 		/// Print sprite data.
 		/// </summary>
 		/// <param name="gameTile">Game tile</param>
@@ -201,6 +192,35 @@ namespace Top2dGame.Client
 			Console.SetCursorPosition(left, top);
 
 			Console.Write(EMPTY);
+		}
+
+		/// <summary>
+		/// Print player location
+		/// </summary>
+		private void PrintPlayerLocation()
+		{
+			Character player = GameMaster.GetInstance().Player;
+
+			// TODO Get cursorPosition from other.
+			Console.SetCursorPosition(0, SightHeight * 2 + 2);
+			Console.WriteLine(string.Format("Location : {0}, {1}", player.GameTile.X.ToString("00"), player.GameTile.Y.ToString("00")));
+		}
+
+		/// <summary>
+		/// Print log
+		/// </summary>
+		private void PrintLog()
+		{
+			const int MAX_SHOW = 5;
+
+			LogMaster logMaster = LogMaster.GetInstance();
+
+			// TODO Get cursorPosition from other.
+			Console.SetCursorPosition(0, SightHeight * 2 + 4);
+			for (int i = 0; i < MAX_SHOW; i++)
+			{
+				Console.WriteLine(logMaster.GetLogFromLatest(i));
+			}
 		}
 	}
 }
