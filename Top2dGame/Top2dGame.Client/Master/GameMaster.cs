@@ -1,4 +1,5 @@
-﻿using Top2dGame.Model.Container;
+﻿using System.Collections.Generic;
+using Top2dGame.Model.Container;
 using Top2dGame.Model.GameObjects;
 using Top2dGame.Model.GameObjects.Characters;
 using Top2dGame.Model.GameObjects.Terrains;
@@ -21,6 +22,11 @@ namespace Top2dGame.Client.Master
 		/// Player information
 		/// </summary>
 		public Character Player { get; set; }
+
+		/// <summary>
+		/// Enemies information
+		/// </summary>
+		public IList<Character> Enemies { get; set; }
 
 		/// <summary>
 		/// Is game clear

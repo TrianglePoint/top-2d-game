@@ -1,25 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
+using Top2dGame.Client.GameObjects.Base;
+using Top2dGame.Client.GameObjects.Player;
 using Top2dGame.Client.Master;
-using Top2dGame.InputMaster.GameController;
+using Top2dGame.Client.Scripts.Base;
 
 namespace Top2dGame.Client
 {
 	// TODO Need create Time class or Turn class
-	// TODO Process negative location
 	// TODO Set boundary
 	// TODO Disable mouse click
 	public class TestThread
 	{
 		private Thread Thread { get; set; }
-		/// <summary>
-		/// Process game Controller's input
-		/// </summary>
-		private GameController GameController { get; set; }
+
+		// TODO Move to GameMaster
+		private IList<GameObject> GameObjects { get; set; }
 
 		public TestThread()
 		{
 			GameMaster gameMaster = GameMaster.GetInstance();
+			// TODO Move to GameMaster
+			GameObjects = new List<GameObject>
+			{
+				new PlayerGameObject()
+			};
 
 			gameMaster.GameStart();
 
@@ -27,7 +33,6 @@ namespace Top2dGame.Client
 			Screen.GetInstance().SetSize(0, 0, 5, 5, 2, 2);
 			// TODO Use other way (ex: import from file)
 			gameMaster.PlaceCharacter(gameMaster.Player, 2, 4);
-			GameController = new GameController();
 			Thread = new Thread(new ThreadStart(ThreadProc));
 
 			Console.CursorVisible = false;
@@ -40,13 +45,25 @@ namespace Top2dGame.Client
 		{
 			int interval = FrameMaster.GetInverval(60);
 
-			GameController.StartReceiveInput();
-
 			while (true)
 			{
+				// TODO Move to GameMaster
+				ProcessUpdate();
 				Screen.GetInstance().Display();
 
 				Thread.Sleep(interval);
+			}
+		}
+
+		// TODO Move to GameMaster
+		private void ProcessUpdate()
+		{
+			foreach (GameObject gameObject in GameObjects)
+			{
+				foreach (GameScript script in gameObject.Scripts)
+				{
+					script.Update();
+				}
 			}
 		}
 
