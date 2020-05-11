@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Top2dGame.Model.Container;
-using Top2dGame.Model.GameObjects;
-using Top2dGame.Model.GameObjects.Characters;
-using Top2dGame.Model.GameObjects.Terrains;
+using Top2dGame.Client.GameObjects.Base;
+using Top2dGame.Client.GameObjects.Player;
+using Top2dGame.Client.GameObjects.Tile;
 
 namespace Top2dGame.Client.Master
 {
@@ -21,12 +20,12 @@ namespace Top2dGame.Client.Master
 		/// <summary>
 		/// Player information
 		/// </summary>
-		public Character Player { get; set; }
+		public PlayerGameObject Player { get; set; }
 
 		/// <summary>
 		/// Enemies information
 		/// </summary>
-		public IList<Character> Enemies { get; set; }
+		public IList<GameObject> Enemies { get; set; }
 
 		/// <summary>
 		/// Is game clear
@@ -38,7 +37,7 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		private GameMaster()
 		{
-			Player = new Player();
+			Player = new PlayerGameObject();
 			IsGameClear = false;
 		}
 
@@ -66,7 +65,7 @@ namespace Top2dGame.Client.Master
 		/// <param name="x">Location x</param>
 		/// <param name="y">Location y</param>
 		/// <returns>Game tile</returns>
-		public GameTile GetGameTile(int x, int y)
+		public TileGameObject GetGameTile(int x, int y)
 		{
 			MapMaster mapMaster = MapMaster.GetInstance();
 
@@ -77,7 +76,7 @@ namespace Top2dGame.Client.Master
 				return null;
 			}
 
-			foreach (GameTile gameTile in mapMaster.GetCurrentMap())
+			foreach (TileGameObject gameTile in mapMaster.GetCurrentMap())
 			{
 				if (gameTile.X == x && gameTile.Y == y)
 				{
@@ -95,7 +94,7 @@ namespace Top2dGame.Client.Master
 		/// <param name="y">Location y</param>
 		/// <param name="mapName">Map name</param>
 		/// <returns>Game tile</returns>
-		public GameTile GetGameTile(int x, int y, string mapName)
+		public TileGameObject GetGameTile(int x, int y, string mapName)
 		{
 			MapMaster mapMaster = MapMaster.GetInstance();
 
@@ -106,7 +105,7 @@ namespace Top2dGame.Client.Master
 				return null;
 			}
 
-			foreach (GameTile gameTile in mapMaster.GetMap(mapName))
+			foreach (TileGameObject gameTile in mapMaster.GetMap(mapName))
 			{
 				if (gameTile.X == x && gameTile.Y == y)
 				{
@@ -124,10 +123,10 @@ namespace Top2dGame.Client.Master
 		/// <param name="x">Location x</param>
 		/// <param name="y">Location y</param>
 		/// <returns>Placed game tile</returns>
-		public GameTile PlaceCharacter(Character character, int x, int y, string mapName = "")
+		public TileGameObject PlaceCharacter(CharacterGameObject character, int x, int y, string mapName = "")
 		{
 			bool canPlace = true;
-			GameTile gameTile;
+			TileGameObject gameTile;
 
 			if (mapName == "")
 			{
@@ -153,22 +152,22 @@ namespace Top2dGame.Client.Master
 			// TODO Process Terrain case. (if terrain is wall, can't place when usually)
 			else if (gameTile.Terrain != null)
 			{
-				if (gameTile.Terrain is Wall)
+				if (gameTile.Terrain is WallGameObject)
 				{
 					LogMaster.GetInstance().WriteLog("There is wall.");
 					canPlace = false;
 				}
-				else if (gameTile.Terrain is Stair stair)
+				else if (gameTile.Terrain is StairGameObject stair)
 				{
 					LogMaster.GetInstance().WriteLog("Move to : " + stair.ToGameMapName);
 					canPlace = false;
 					// Move through stair
 					PlaceCharacter(character, stair.ToX, stair.ToY, stair.ToGameMapName);
 				}
-				else if (gameTile.Terrain is Exit)
+				else if (gameTile.Terrain is ExitGameObject)
 				{
 					// Player has escaped!
-					if (character is Player)
+					if (character is PlayerGameObject)
 					{
 						GameClear();
 					}
@@ -194,6 +193,9 @@ namespace Top2dGame.Client.Master
 				}
 				// After location info
 				character.GameTile = gameTile;
+
+				character.X = x;
+				character.Y = y;
 
 				// Move to other game map
 				if (mapName != "")

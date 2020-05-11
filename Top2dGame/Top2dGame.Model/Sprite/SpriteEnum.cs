@@ -1,6 +1,6 @@
 ﻿namespace Top2dGame.Model.Sprite
 {
-	enum SpriteEnum
+	public enum SpriteEnum
 	{
 		Player = '@',
 		Wall = '#',

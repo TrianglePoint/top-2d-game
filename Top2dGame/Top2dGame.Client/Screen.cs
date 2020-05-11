@@ -1,7 +1,8 @@
 ﻿using System;
+using Top2dGame.Client.GameObjects.Base;
+using Top2dGame.Client.GameObjects.Player;
+using Top2dGame.Client.GameObjects.Tile;
 using Top2dGame.Client.Master;
-using Top2dGame.Model.Container;
-using Top2dGame.Model.GameObjects;
 
 namespace Top2dGame.Client
 {
@@ -90,14 +91,14 @@ namespace Top2dGame.Client
 				return;
 			}
 
-			ChasePlayer(gameMaster.Player.GameTile);
+			ChasePlayer(gameMaster.Player);
 
 			// Show screen as Screen location and sight
 			for (int i = 0, x = X - SightWidth; i < SightWidth * 2 + 1; i++, x++)
 			{
 				for (int j = 0, y = Y - SightHeight; j < SightHeight * 2 + 1; j++, y++)
 				{
-					GameTile gameTile = gameMaster.GetGameTile(x, y);
+					TileGameObject gameTile = gameMaster.GetGameTile(x, y);
 
 					if (gameTile != null)
 					{
@@ -118,38 +119,38 @@ namespace Top2dGame.Client
 		/// <summary>
 		/// Chase player
 		/// </summary>
-		/// <param name="playerGameTile">player game tile</param>
-		private void ChasePlayer(GameTile playerGameTile)
+		/// <param name="player">player game tile</param>
+		private void ChasePlayer(PlayerGameObject player)
 		{
 			GameMaster gameMaster = GameMaster.GetInstance();
 
 			// Screen should chase player on x-axis
-			if (gameMaster.GetDistance(X, playerGameTile.X) > NotChaseWidth)
+			if (gameMaster.GetDistance(X, player.X) > NotChaseWidth)
 			{
 				// Player is on the right of screen
-				if (playerGameTile.X - X > 0)
+				if (player.X - X > 0)
 				{
-					X = playerGameTile.X - NotChaseWidth;
+					X = player.X - NotChaseWidth;
 				}
 				// Player is on the left of screen
 				else
 				{
-					X = playerGameTile.X + NotChaseWidth;
+					X = player.X + NotChaseWidth;
 				}
 
 			}
 			// Screen should chase player on y-axis
-			if (gameMaster.GetDistance(Y, playerGameTile.Y) > NotChaseHeight)
+			if (gameMaster.GetDistance(Y, player.Y) > NotChaseHeight)
 			{
 				// Player is on the bottom of screen
-				if (playerGameTile.Y - Y > 0)
+				if (player.Y - Y > 0)
 				{
-					Y = playerGameTile.Y - NotChaseWidth;
+					Y = player.Y - NotChaseWidth;
 				}
 				// Player is on the top of screen
 				else
 				{
-					Y = playerGameTile.Y + NotChaseWidth;
+					Y = player.Y + NotChaseWidth;
 				}
 
 			}
@@ -161,7 +162,7 @@ namespace Top2dGame.Client
 		/// <param name="gameTile">Game tile</param>
 		/// <param name="left">Print location x</param>
 		/// <param name="top">Print location y</param>
-		private void PrintData(GameTile gameTile, int left, int top)
+		private void PrintData(TileGameObject gameTile, int left, int top)
 		{
 			Console.SetCursorPosition(left, top);
 			
@@ -199,11 +200,11 @@ namespace Top2dGame.Client
 		/// </summary>
 		private void PrintPlayerLocation()
 		{
-			Character player = GameMaster.GetInstance().Player;
+			GameObject player = GameMaster.GetInstance().Player;
 
 			// TODO Get cursorPosition from other.
 			Console.SetCursorPosition(0, SightHeight * 2 + 2);
-			Console.WriteLine(string.Format("Location : {0}, {1}", player.GameTile.X.ToString("00"), player.GameTile.Y.ToString("00")));
+			Console.WriteLine(string.Format("Location : {0}, {1}", player.X.ToString("00"), player.Y.ToString("00")));
 		}
 
 		/// <summary>

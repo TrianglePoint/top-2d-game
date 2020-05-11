@@ -12,6 +12,13 @@ namespace Top2dGame.Client.Scripts.Player
 		/// </summary>
 		private Controller Controller { get; set; }
 
+		private long Time { get; set; }
+
+		/// <summary>
+		/// Millisecond unit
+		/// </summary>
+		public long InputInterval { get; set; }
+
 		protected override void Start()
 		{
 			Controller = new Controller(UserIndex.One);
@@ -27,7 +34,11 @@ namespace Top2dGame.Client.Scripts.Player
 		}
 
 		public override void Update()
-		{           
+		{
+			long currentTime = DateTime.Now.Ticks;
+
+			if (currentTime < Time) { return; }
+
 			// TODO Need const class
 			const int ONE_PIXEL = 1;
 
@@ -36,8 +47,8 @@ namespace Top2dGame.Client.Scripts.Player
 			if (Controller.IsConnected)
 			{
 				bool inputted = false;
-				int newX = gameMaster.Player.GameTile.X;
-				int newY = gameMaster.Player.GameTile.Y;
+				int newX = gameMaster.Player.X;
+				int newY = gameMaster.Player.Y;
 
 				Controller.GetState(out State state);
 
@@ -68,6 +79,8 @@ namespace Top2dGame.Client.Scripts.Player
 				if (inputted)
 				{
 					gameMaster.PlaceCharacter(gameMaster.Player, newX, newY);
+
+					Time = currentTime + InputInterval * TimeSpan.TicksPerMillisecond;
 				}
 			}
 		}
