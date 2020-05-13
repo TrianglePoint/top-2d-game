@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Player;
 using Top2dGame.Client.GameObjects.Tile;
 using Top2dGame.Client.Master;
+using Top2dGame.Model.Const;
 
 namespace Top2dGame.Client
 {
@@ -16,6 +18,22 @@ namespace Top2dGame.Client
 		/// </summary>
 		private static readonly Screen Instance = new Screen();
 
+		/// <summary>
+		/// Border width
+		/// </summary>
+		private int BorderW { get; set; }
+		/// <summary>
+		/// Border height
+		/// </summary>
+		private int BorderH { get; set; }
+		/// <summary>
+		/// Width
+		/// </summary>
+		private int Width { get; set; }
+		/// <summary>
+		/// Height
+		/// </summary>
+		private int Height { get; set; }
 		/// <summary>
 		/// Location X
 		/// </summary>
@@ -41,6 +59,11 @@ namespace Top2dGame.Client
 		/// </summary>
 		private int NotChaseHeight { get; set; }
 
+		private IList<IList<string>> BeforeScreenInfo { get; set; }
+
+		// TODO Move to const file.
+		const string EMPTY = " ";
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -56,22 +79,63 @@ namespace Top2dGame.Client
 		}
 
 		/// <summary>
-		/// Set size
+		/// Create frame
 		/// </summary>
+		/// <param name="borderW">Screen border width</param>
+		/// <param name="borderH">Screen border height</param>
+		/// <param name="width">Screen width</param>
+		/// <param name="height">Screen height</param>
 		/// <param name="x">Screen location</param>
 		/// <param name="y">Screen location</param>
 		/// <param name="sightWidth">Screen size</param>
 		/// <param name="sightHeight">Screen size</param>
 		/// <param name="notChaseWidth">Range that does not chase player</param>
 		/// <param name="notChaseHeight">Range that does not chase player</param>
-		public void SetSize(int x, int y, int sightWidth, int sightHeight, int notChaseWidth, int notChaseHeight)
+		public void CreateFrame(int borderW, int borderH, int width, int height, int x, int y, int sightWidth, int sightHeight, int notChaseWidth, int notChaseHeight)
 		{
+			BorderW = borderW;
+			BorderH = borderH;
+			Width = width;
+			Height = height;
 			X = x;
 			Y = y;
 			SightWidth = sightWidth;
 			SightHeight = sightHeight;
 			NotChaseWidth = notChaseWidth;
 			NotChaseHeight = notChaseHeight;
+
+			BeforeScreenInfo = CreateScreenInfo(Width, Height);
+
+			DrawBorder(BorderW, BorderH, Width, Height);
+		}
+
+		/// <summary>
+		/// Draw border
+		/// </summary>
+		/// <param name="borderW"></param>
+		/// <param name="borderH"></param>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		private void DrawBorder(int borderW, int borderH, int width, int height)
+		{
+			string border = "|";
+			int screenStartX = borderW;
+			int screenStartY = borderH;
+			int screenEndX = borderW + width - 1;
+			int screenEndY = borderH + height - 1;
+
+			for (int j = 0; j < borderH * 2 + height; j++)
+			{
+				for (int i = 0; i < borderW * 2 + width; i++)
+				{
+					if ((i < screenStartX || i > screenEndX) ||
+						(j < screenStartY || j > screenEndY))
+					{
+						Console.SetCursorPosition(i, j);
+						Console.Write(border);
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -79,6 +143,7 @@ namespace Top2dGame.Client
 		/// </summary>
 		public void Display()
 		{
+			IList<IList<string>> currentScreenInfo;
 			GameMaster gameMaster = GameMaster.GetInstance();
 
 			if (gameMaster.IsGameClear)
@@ -93,27 +158,43 @@ namespace Top2dGame.Client
 
 			ChasePlayer(gameMaster.Player);
 
-			// Show screen as Screen location and sight
-			for (int i = 0, x = X - SightWidth; i < SightWidth * 2 + 1; i++, x++)
-			{
-				for (int j = 0, y = Y - SightHeight; j < SightHeight * 2 + 1; j++, y++)
-				{
-					TileGameObject gameTile = gameMaster.GetGameTile(x, y);
+			currentScreenInfo = CreateScreenInfo(Width, Height);
+			SetGameObjects(gameMaster, GameTileConst.SPACE, currentScreenInfo);
+			SetGameObjects(gameMaster, GameTileConst.TERRAIN, currentScreenInfo);
+			SetGameObjects(gameMaster, GameTileConst.CHARACTER, currentScreenInfo);
 
-					if (gameTile != null)
-					{
-						PrintData(gameTile, i, j);
-					}
-					else
-					{
-						PrintEmpty(i, j);
-					}
+			SetPlayerLocation(currentScreenInfo);
+			SetLog(currentScreenInfo);
+
+			DrawScreen(BeforeScreenInfo, currentScreenInfo);
+
+			// Overwrite before info with current info
+			BeforeScreenInfo = currentScreenInfo;
+		}
+
+		/// <summary>
+		/// Create screen info to EMPTY
+		/// </summary>
+		/// <param name="width">Screen width</param>
+		/// <param name="height">Screen height</param>
+		/// <returns>Screen info</returns>
+		private IList<IList<string>> CreateScreenInfo(int width, int height)
+		{
+			IList<IList<string>> screenInfo = new List<IList<string>>();
+
+			for (int h = 0; h < height; h++)
+			{
+				IList<string> horizontal = new List<string>();
+
+				for (int w = 0; w < width; w++)
+				{
+					horizontal.Add(EMPTY);
 				}
+
+				screenInfo.Add(horizontal);
 			}
 
-			PrintPlayerLocation();
-
-			PrintLog();
+			return screenInfo;
 		}
 
 		/// <summary>
@@ -157,70 +238,118 @@ namespace Top2dGame.Client
 		}
 
 		/// <summary>
-		/// Print sprite data.
+		/// Set screen info
 		/// </summary>
-		/// <param name="gameTile">Game tile</param>
-		/// <param name="left">Print location x</param>
-		/// <param name="top">Print location y</param>
-		private void PrintData(TileGameObject gameTile, int left, int top)
+		/// <param name="screenInfo">Screen info</param>
+		/// <param name="left">Cursor position : left</param>
+		/// <param name="top">Cursor position : top</param>
+		/// <param name="sprite">Data drawn on screen</param>
+		private void SetScreenInfo(IList<IList<string>> screenInfo, int left, int top, string sprite)
 		{
-			Console.SetCursorPosition(left, top);
-			
-			if (gameTile.Character != null)
+			foreach (char data in sprite)
 			{
-				Console.Write(gameTile.Character.Sprite);
-			}
-			else if (gameTile.Terrain != null)
-			{
-				Console.Write(gameTile.Terrain.Sprite);
-			}
-			else if (gameTile.Space != null)
-			{
-				Console.Write(gameTile.Space.Sprite);
+				if (top < screenInfo.Count && left < screenInfo[top].Count)
+				{
+					screenInfo[top][left++] = data.ToString();
+				}
 			}
 		}
 
 		/// <summary>
-		/// Print empty.
+		/// Set game objects into current screen info
 		/// </summary>
-		/// <param name="left">Print location x</param>
-		/// <param name="top">Print location y</param>
-		private void PrintEmpty(int left, int top)
+		/// <param name="gameMaster">Game master</param>
+		/// <param name="tileType">Tile type</param>
+		/// <param name="currentScreenInfo">Current screen info</param>
+		private void SetGameObjects(GameMaster gameMaster, int tileType, IList<IList<string>> currentScreenInfo)
 		{
-			// TODO Move to const file.
-			const char EMPTY = ' ';
+			// Show screen as Screen location and sight
+			for (int i = 0, x = X - SightWidth; i < SightWidth * 2 + 1; i++, x++)
+			{
+				for (int j = 0, y = Y - SightHeight; j < SightHeight * 2 + 1; j++, y++)
+				{
+					TileGameObject gameTile = gameMaster.GetGameTile(x, y);
 
-			Console.SetCursorPosition(left, top);
-
-			Console.Write(EMPTY);
+					if (gameTile != null)
+					{
+						if (tileType == GameTileConst.CHARACTER && gameTile.Character != null)
+						{
+							int top = j;
+							foreach (string sprite in gameTile.Character.Sprite)
+							{
+								SetScreenInfo(currentScreenInfo, i, top++, sprite);
+							}
+						}
+						else if (tileType == GameTileConst.TERRAIN && gameTile.Terrain != null)
+						{
+							int top = j;
+							foreach (string sprite in gameTile.Terrain.Sprite)
+							{
+								SetScreenInfo(currentScreenInfo, i, top++, sprite);
+							}
+						}
+						else if (tileType == GameTileConst.SPACE && gameTile.Space != null)
+						{
+							int top = j;
+							foreach (string sprite in gameTile.Space.Sprite)
+							{
+								SetScreenInfo(currentScreenInfo, i, top++, sprite);
+							}
+						}
+					}
+				}
+			}
 		}
 
 		/// <summary>
-		/// Print player location
+		/// Set player location into current screen info
 		/// </summary>
-		private void PrintPlayerLocation()
+		/// <param name="currentScreenInfo">Current screen info</param>
+		private void SetPlayerLocation(IList<IList<string>> currentScreenInfo)
 		{
 			GameObject player = GameMaster.GetInstance().Player;
 
+			string text = string.Format("Location : {0}, {1}", player.X.ToString("00"), player.Y.ToString("00"));
+
 			// TODO Get cursorPosition from other.
-			Console.SetCursorPosition(0, SightHeight * 2 + 2);
-			Console.WriteLine(string.Format("Location : {0}, {1}", player.X.ToString("00"), player.Y.ToString("00")));
+			SetScreenInfo(currentScreenInfo, 1, SightHeight * 2 + 2, text);
 		}
 
 		/// <summary>
-		/// Print log
+		/// Set log into current screen info
 		/// </summary>
-		private void PrintLog()
+		/// <param name="currentScreenInfo">Current screen info</param>
+		private void SetLog(IList<IList<string>> currentScreenInfo)
 		{
 			const int MAX_SHOW = 5;
 
 			LogMaster logMaster = LogMaster.GetInstance();
 
-			// TODO Get cursorPosition from other.
-			Console.SetCursorPosition(0, SightHeight * 2 + 4);
 			for (int i = 0; i < MAX_SHOW; i++)
 			{
-				Console.WriteLine(logMaster.GetLogFromLatest(i));
+				// TODO Get cursorPosition from other.
+				SetScreenInfo(currentScreenInfo, 0, SightHeight * 2 + 4 + i, logMaster.GetLogFromLatest(i));
+			}
+		}
+
+		/// <summary>
+		/// Draw screen
+		/// </summary>
+		/// <param name="beforeScreenInfo">Before screen info</param>
+		/// <param name="currentScreenInfo">Current scrren info</param>
+		private void DrawScreen(IList<IList<string>> beforeScreenInfo, IList<IList<string>> currentScreenInfo)
+		{
+			for (int height = 0; height < currentScreenInfo.Count; height++)
+			{
+				for (int width = 0; width < currentScreenInfo[height].Count; width++)
+				{
+					// If different current and before screen info
+					if (!currentScreenInfo[height][width].Equals(beforeScreenInfo[height][width]))
+					{
+						Console.SetCursorPosition(width + BorderW, height + BorderH);
+						Console.Write(currentScreenInfo[height][width]);
+					}
+				}
 			}
 		}
 	}

@@ -15,9 +15,9 @@ namespace Top2dGame.Client.GameObjects.Base
 		public int Y { get; set; }
 
 		/// <summary>
-		/// Sprite displayed on the screen (Use SpriteEnum)
+		/// Sprite displayed on the screen (Use SpriteEnum or specified text)
 		/// </summary>`
-		public virtual char Sprite { get; }
+		public virtual IList<string> Sprite { get; }
 
 		/// <summary>
 		/// Scripts

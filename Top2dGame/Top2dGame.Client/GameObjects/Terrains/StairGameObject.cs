@@ -1,11 +1,12 @@
-﻿using Top2dGame.Client.GameObjects.Base;
+﻿using System.Collections.Generic;
+using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Model.Sprite;
 
 namespace Top2dGame.Client.GameObjects.Tile
 {
 	public class StairGameObject : GameObject
 	{
-		public override char Sprite => (char)SpriteEnum.Stair;
+		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Stair).ToString() };
 
 		/// <summary>
 		/// To game map

@@ -30,7 +30,7 @@ namespace Top2dGame.Client
 			gameMaster.GameStart();
 
 			// TODO Use other way (ex: import from file)
-			Screen.GetInstance().SetSize(0, 0, 5, 5, 2, 2);
+			Screen.GetInstance().CreateFrame(3, 2, 20, 20, 0, 0, 5, 5, 2, 2);
 			// TODO Use other way (ex: import from file)
 			gameMaster.PlaceCharacter(gameMaster.Player, 2, 4);
 			Thread = new Thread(new ThreadStart(ThreadProc));
