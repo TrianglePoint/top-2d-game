@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Top2dGame.Client.Scripts.Base;
 
 namespace Top2dGame.Client.GameObjects.Base
@@ -34,5 +35,23 @@ namespace Top2dGame.Client.GameObjects.Base
 		/// Add script
 		/// </summary>
 		protected abstract void AddScript();
+
+		/// <summary>
+		/// Get script
+		/// </summary>
+		/// <param name="findScriptType">Find script type</param>
+		/// <returns>Script</returns>
+		public GameScript GetScript(Type findScriptType)
+		{
+			foreach (GameScript script in Scripts)
+			{
+				if (script.GetType() == findScriptType)
+				{
+					return script;
+				}
+			}
+
+			return null;
+		}
 	}
 }

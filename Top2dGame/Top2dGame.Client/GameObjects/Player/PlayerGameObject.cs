@@ -10,16 +10,6 @@ namespace Top2dGame.Client.GameObjects.Player
 	{
 		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Player).ToString() };
 
-		/// <summary>
-		/// Health point
-		/// </summary>
-		public int HealthPoint { get; set; }
-
-		/// <summary>
-		/// Satiation
-		/// </summary>
-		public int Satiation { get; set; }
-
 		protected override void AddScript()
 		{
 			Scripts.Add(new CharacterStatusScript());

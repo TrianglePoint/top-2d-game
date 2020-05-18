@@ -2,6 +2,8 @@
 using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Player;
 using Top2dGame.Client.GameObjects.Tile;
+using Top2dGame.Client.Scripts.Base;
+using Top2dGame.Client.Scripts.Character;
 
 namespace Top2dGame.Client.Master
 {
@@ -16,6 +18,11 @@ namespace Top2dGame.Client.Master
 		/// Instance
 		/// </summary>
 		private static readonly GameMaster Instance = new GameMaster();
+
+		/// <summary>
+		/// Game objects
+		/// </summary>
+		private IList<GameObject> GameObjects { get; set; }
 
 		/// <summary>
 		/// Player information
@@ -37,6 +44,7 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		private GameMaster()
 		{
+			GameObjects = new List<GameObject>();
 			Player = new PlayerGameObject();
 			IsGameClear = false;
 		}
@@ -55,9 +63,11 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		public void GameStart()
 		{
+			InitPlayer();
+
+			GameObjects.Add(Player);
 			MapMaster.GetInstance().SetCurrentMap("map1");
 		}
-
 
 		/// <summary>
 		/// Get game tile
@@ -224,6 +234,49 @@ namespace Top2dGame.Client.Master
 		public int GetDistance(int a, int b)
 		{
 			return System.Math.Abs(a - b);
+		}
+
+		/// <summary>
+		/// Process gameobject update
+		/// </summary>
+		public void ProcessUpdate()
+		{
+			foreach (GameObject gameObject in GameObjects)
+			{
+				foreach (GameScript script in gameObject.Scripts)
+				{
+					script.Update();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Next turn
+		/// </summary>
+		public void NextTurn()
+		{
+			foreach (GameObject gameObject in GameObjects)
+			{
+				foreach (GameScript script in gameObject.Scripts)
+				{
+					script.UpdateEveryTurn();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Init player (TODO this method is temp. load player info from other file)
+		/// </summary>
+		private void InitPlayer()
+		{
+			CharacterStatusScript playerStatus = Player.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
+			int healthPoint = 10;
+			int satiation = 5;
+
+			playerStatus.HealthPoint = healthPoint;
+			playerStatus.MaxHealthPoint = healthPoint;
+			playerStatus.Satiation = satiation;
+			playerStatus.MaxSatiation = satiation;
 		}
 	}
 }

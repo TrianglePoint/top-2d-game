@@ -4,6 +4,7 @@ using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Player;
 using Top2dGame.Client.GameObjects.Tile;
 using Top2dGame.Client.Master;
+using Top2dGame.Client.Scripts.Character;
 using Top2dGame.Model.Const;
 
 namespace Top2dGame.Client
@@ -163,6 +164,7 @@ namespace Top2dGame.Client
 			SetGameObjects(gameMaster, GameTileConst.TERRAIN, currentScreenInfo);
 			SetGameObjects(gameMaster, GameTileConst.CHARACTER, currentScreenInfo);
 
+			SetPlayerInfo(currentScreenInfo);
 			SetPlayerLocation(currentScreenInfo);
 			SetLog(currentScreenInfo);
 
@@ -299,6 +301,25 @@ namespace Top2dGame.Client
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Set log into current screen info
+		/// </summary>
+		/// <param name="currentScreenInfo">Current screen info</param>
+		private void SetPlayerInfo(IList<IList<string>> currentScreenInfo)
+		{
+			PlayerGameObject player = GameMaster.GetInstance().Player;
+			CharacterStatusScript statusScript = player.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
+
+			// TODO Get cursorPosition from other.
+			SetScreenInfo(currentScreenInfo, SightWidth * 2 + 2, 1, "HP");
+			// TODO Get cursorPosition from other.
+			SetScreenInfo(currentScreenInfo, SightWidth * 2 + 2, 2, statusScript.HealthPoint.ToString("00"));
+			// TODO Get cursorPosition from other.
+			SetScreenInfo(currentScreenInfo, SightWidth * 2 + 2, 4, "Satiation");
+			// TODO Get cursorPosition from other.
+			SetScreenInfo(currentScreenInfo, SightWidth * 2 + 2, 5, statusScript.Satiation.ToString("00"));
 		}
 
 		/// <summary>

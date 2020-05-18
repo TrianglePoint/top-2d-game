@@ -79,6 +79,7 @@ namespace Top2dGame.Client.Scripts.Player
 				if (inputted)
 				{
 					gameMaster.PlaceCharacter(gameMaster.Player, newX, newY);
+					gameMaster.NextTurn();
 
 					Time = currentTime + InputInterval * TimeSpan.TicksPerMillisecond;
 				}
@@ -87,7 +88,7 @@ namespace Top2dGame.Client.Scripts.Player
 
 		public override void UpdateEveryTurn()
 		{
-			throw new System.NotImplementedException();
+
 		}
 	}
 }
