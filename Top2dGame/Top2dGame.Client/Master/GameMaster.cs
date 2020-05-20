@@ -30,11 +30,6 @@ namespace Top2dGame.Client.Master
 		public PlayerGameObject Player { get; set; }
 
 		/// <summary>
-		/// Enemies information
-		/// </summary>
-		public IList<GameObject> Enemies { get; set; }
-
-		/// <summary>
 		/// Is game clear
 		/// </summary>
 		public bool IsGameClear { get; set; }
@@ -59,13 +54,31 @@ namespace Top2dGame.Client.Master
 		}
 
 		/// <summary>
+		/// Add specified game object to game master
+		/// </summary>
+		/// <param name="gameObject">Game object to add</param>
+		public void AddGameObject(GameObject gameObject)
+		{
+			GameObjects.Add(gameObject);
+		}
+
+		/// <summary>
+		/// Remove specified game object from game master
+		/// </summary>
+		/// <param name="gameObject">Game object to remove</param>
+		public void RemoveGameObject(GameObject gameObject)
+		{
+			GameObjects.Remove(gameObject);
+		}
+
+		/// <summary>
 		/// Start the game
 		/// </summary>
 		public void GameStart()
 		{
 			InitPlayer();
 
-			GameObjects.Add(Player);
+			AddGameObject(Player);
 			MapMaster.GetInstance().SetCurrentMap("map1");
 		}
 
@@ -241,9 +254,10 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		public void ProcessUpdate()
 		{
-			foreach (GameObject gameObject in GameObjects)
+			// TODO Is it fine when remove game object?
+			for (int i = 0; i < GameObjects.Count; i++)
 			{
-				foreach (GameScript script in gameObject.Scripts)
+				foreach (GameScript script in GameObjects[i].Scripts)
 				{
 					script.Update();
 				}
@@ -255,9 +269,10 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		public void NextTurn()
 		{
-			foreach (GameObject gameObject in GameObjects)
+			// TODO Is it fine when remove game object?
+			for (int i = 0; i < GameObjects.Count; i++)
 			{
-				foreach (GameScript script in gameObject.Scripts)
+				foreach (GameScript script in GameObjects[i].Scripts)
 				{
 					script.UpdateEveryTurn();
 				}

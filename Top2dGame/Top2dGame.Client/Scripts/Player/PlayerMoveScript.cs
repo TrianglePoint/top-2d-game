@@ -1,5 +1,6 @@
 ﻿using SharpDX.XInput;
 using System;
+using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.Master;
 using Top2dGame.Client.Scripts.Base;
 
@@ -18,6 +19,8 @@ namespace Top2dGame.Client.Scripts.Player
 		/// Millisecond unit
 		/// </summary>
 		public long InputInterval { get; set; }
+
+		public PlayerMoveScript(GameObject gameObject) : base(gameObject) { }
 
 		protected override void Start()
 		{

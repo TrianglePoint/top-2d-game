@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Top2dGame.Client.Master;
 using Top2dGame.Client.Scripts.Base;
 
 namespace Top2dGame.Client.GameObjects.Base
@@ -29,6 +30,14 @@ namespace Top2dGame.Client.GameObjects.Base
 		{
 			Scripts = new List<GameScript>();
 			AddScript();
+		}
+
+		/// <summary>
+		/// Destroy game object
+		/// </summary>
+		public void Destroy()
+		{
+			GameMaster.GetInstance().RemoveGameObject(this);
 		}
 		
 		/// <summary>

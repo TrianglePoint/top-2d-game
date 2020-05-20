@@ -1,4 +1,5 @@
 ﻿using System;
+using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.Scripts.Base;
 
 namespace Top2dGame.Client.Scripts.Character
@@ -25,6 +26,8 @@ namespace Top2dGame.Client.Scripts.Character
 		/// </summary>
 		public int MaxSatiation { get; set; }
 
+		public CharacterStatusScript(GameObject gameObject) : base(gameObject) { }
+
 		protected override void Start()
 		{
 
@@ -45,8 +48,32 @@ namespace Top2dGame.Client.Scripts.Character
 				HealthPoint -= 1;
 			}
 
+			if (IsHpZero())
+			{
+				Die();
+			}
+
 			HealthPoint = Math.Clamp(HealthPoint, 0, MaxHealthPoint);
 			Satiation = Math.Clamp(Satiation, 0, MaxSatiation);
+			
+		}
+
+		/// <summary>
+		/// Get 
+		/// </summary>
+		/// <returns></returns>
+		private bool IsHpZero()
+		{
+			return HealthPoint <= 0;
+		}
+
+		/// <summary>
+		/// Die game object
+		/// </summary>
+		/// <returns></returns>
+		private void Die()
+		{
+			GameObject.Destroy();
 		}
 	}
 }

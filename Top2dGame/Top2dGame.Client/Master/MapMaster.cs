@@ -96,6 +96,14 @@ namespace Top2dGame.Client.Master
 							Y = y
 						});
 					}
+					else if ((x == 2 && y == 3) || num != 0)
+					{
+						gameMap.Add(new TileGameObject
+						{
+							X = x,
+							Y = y
+						});
+					}
 					else if ((x == 0 && y == 0) || num != 0)
 					{
 						gameMap.Add(new TileGameObject

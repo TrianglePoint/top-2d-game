@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Top2dGame.Client.GameObjects.Tile;
 using Top2dGame.Client.Master;
 
 namespace Top2dGame.Client
@@ -14,6 +15,8 @@ namespace Top2dGame.Client
 		public TestThread()
 		{
 			GameMaster gameMaster = GameMaster.GetInstance();
+			// TOOD This is temp game object. remove after.
+			CharacterGameObject someObject = new CharacterGameObject();
 
 			gameMaster.GameStart();
 
@@ -21,6 +24,9 @@ namespace Top2dGame.Client
 			Screen.GetInstance().CreateFrame(3, 2, 22, 20, 0, 0, 5, 5, 2, 2);
 			// TODO Use other way (ex: import from file)
 			gameMaster.PlaceCharacter(gameMaster.Player, 2, 4);
+			// TODO Use other way (ex: import from file)
+			gameMaster.AddGameObject(someObject);
+			gameMaster.PlaceCharacter(someObject, 2, 3);
 			Thread = new Thread(new ThreadStart(ThreadProc));
 
 			Console.CursorVisible = false;

@@ -1,9 +1,14 @@
-﻿namespace Top2dGame.Client.Scripts.Base
+﻿using Top2dGame.Client.GameObjects.Base;
+
+namespace Top2dGame.Client.Scripts.Base
 {
 	public abstract class GameScript
 	{
-		protected GameScript()
+		protected GameObject GameObject { get; set; }
+
+		protected GameScript(GameObject gameObject)
 		{
+			GameObject = gameObject;
 			Start();
 		}
 
