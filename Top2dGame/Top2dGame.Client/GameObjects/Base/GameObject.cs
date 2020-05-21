@@ -17,8 +17,13 @@ namespace Top2dGame.Client.GameObjects.Base
 		public int Y { get; set; }
 
 		/// <summary>
+		/// Identify tag
+		/// </summary>
+		public long Tag { get; set; }
+
+		/// <summary>
 		/// Sprite displayed on the screen (Use SpriteEnum or specified text)
-		/// </summary>`
+		/// </summary>
 		public virtual IList<string> Sprite { get; }
 
 		/// <summary>
@@ -39,7 +44,52 @@ namespace Top2dGame.Client.GameObjects.Base
 		{
 			GameMaster.GetInstance().RemoveGameObject(this);
 		}
-		
+
+		/// <summary>
+		/// Get bool value that game object has specified tag.
+		/// </summary>
+		/// <param name="tag">Tag enum</param>
+		/// <returns>Has tag?</returns>
+		public bool HasTag(int tag)
+		{
+			// No tag
+			if (Tag == 0)
+			{
+				return false;
+			}
+
+			long shiftedValue = Tag >> tag - 1;
+
+			return shiftedValue % 2 == 1;
+		}
+
+		/// <summary>
+		/// Set tag
+		/// </summary>
+		/// <param name="tag">Tag to set</param>
+		/// <param name="enabled">Enabled bool value</param>
+		public void SetTag(int tag, bool enabled)
+		{
+			int value = 1 << tag - 1;
+
+			if (HasTag(tag))
+			{
+				// Remove tag
+				if (!enabled)
+				{
+					Tag -= value;
+				}
+			}
+			else
+			{
+				// Add tag
+				if (enabled)
+				{
+					Tag += value;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Add script
 		/// </summary>

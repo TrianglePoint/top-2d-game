@@ -1,4 +1,4 @@
-﻿namespace Top2dGame.Model.Sprite
+﻿namespace Top2dGame.Model.Const
 {
 	public enum SpriteEnum
 	{

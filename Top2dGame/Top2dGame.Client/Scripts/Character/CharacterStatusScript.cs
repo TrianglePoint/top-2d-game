@@ -1,5 +1,6 @@
 ﻿using System;
 using Top2dGame.Client.GameObjects.Base;
+using Top2dGame.Client.Master;
 using Top2dGame.Client.Scripts.Base;
 
 namespace Top2dGame.Client.Scripts.Character
@@ -73,6 +74,7 @@ namespace Top2dGame.Client.Scripts.Character
 		/// <returns></returns>
 		private void Die()
 		{
+			LogMaster.GetInstance().WriteLog("Character is dead.");
 			GameObject.Destroy();
 		}
 	}

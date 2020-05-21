@@ -4,6 +4,7 @@ using Top2dGame.Client.GameObjects.Player;
 using Top2dGame.Client.GameObjects.Tile;
 using Top2dGame.Client.Scripts.Base;
 using Top2dGame.Client.Scripts.Character;
+using Top2dGame.Model.Const;
 
 namespace Top2dGame.Client.Master
 {
@@ -39,7 +40,6 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		private GameMaster()
 		{
-			GameObjects = new List<GameObject>();
 			Player = new PlayerGameObject();
 			IsGameClear = false;
 		}
@@ -76,67 +76,67 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		public void GameStart()
 		{
+			GameObjects = MapMaster.GetInstance().GetMap("map1");
 			InitPlayer();
-
 			AddGameObject(Player);
-			MapMaster.GetInstance().SetCurrentMap("map1");
 		}
 
 		/// <summary>
-		/// Get game tile
+		/// Get game object list
 		/// </summary>
 		/// <param name="x">Location x</param>
 		/// <param name="y">Location y</param>
-		/// <returns>Game tile</returns>
-		public TileGameObject GetGameTile(int x, int y)
+		/// <returns>Game object list</returns>
+		public IList<GameObject> GetGameObjects(int x, int y)
 		{
-			MapMaster mapMaster = MapMaster.GetInstance();
+			IList<GameObject> gameObjects = new List<GameObject>();
 
-			if (mapMaster.GetCurrentMap() == null)
+			if (GameObjects == null)
 			{
 				// TODO Print text "No Game map!" in textLog section
 
-				return null;
+				return gameObjects;
 			}
 
-			foreach (TileGameObject gameTile in mapMaster.GetCurrentMap())
+			foreach (GameObject gameObject in GameObjects)
 			{
-				if (gameTile.X == x && gameTile.Y == y)
+				if (gameObject.X == x && gameObject.Y == y)
 				{
-					return gameTile;
+					gameObjects.Add(gameObject);
 				}
 			}
 
-			return null;
+			return gameObjects;
 		}
 
 		/// <summary>
-		/// Get game tile
+		/// Get game object list
 		/// </summary>
 		/// <param name="x">Location x</param>
 		/// <param name="y">Location y</param>
 		/// <param name="mapName">Map name</param>
-		/// <returns>Game tile</returns>
-		public TileGameObject GetGameTile(int x, int y, string mapName)
+		/// <returns>Game object list</returns>
+		public IList<GameObject> GetGameObjects(int x, int y, string mapName)
 		{
+			IList<GameObject> gameObjects = new List<GameObject>();
 			MapMaster mapMaster = MapMaster.GetInstance();
 
 			if (mapMaster.GetMap(mapName) == null)
 			{
 				// TODO Print text "No Game map!" in textLog section
 
-				return null;
+				return gameObjects;
 			}
 
-			foreach (TileGameObject gameTile in mapMaster.GetMap(mapName))
+			foreach (GameObject gameObject in mapMaster.GetMap(mapName))
 			{
-				if (gameTile.X == x && gameTile.Y == y)
+				if (gameObject.X == x && gameObject.Y == y)
 				{
-					return gameTile;
+					gameObjects.Add(gameObject);
 				}
 			}
 
-			return null;
+			return gameObjects;
 		}
 
 		/// <summary>
@@ -146,88 +146,80 @@ namespace Top2dGame.Client.Master
 		/// <param name="x">Location x</param>
 		/// <param name="y">Location y</param>
 		/// <returns>Placed game tile</returns>
-		public TileGameObject PlaceCharacter(CharacterGameObject character, int x, int y, string mapName = "")
+		public void PlaceCharacter(CharacterGameObject character, int x, int y, string mapName = "")
 		{
 			bool canPlace = true;
-			TileGameObject gameTile;
+			IList<GameObject> gameObjects;
 
 			if (mapName == "")
 			{
-				gameTile = GetGameTile(x, y);
+				gameObjects = GetGameObjects(x, y);
 			}
 			else
 			{
-				gameTile = GetGameTile(x, y, mapName);
+				gameObjects = GetGameObjects(x, y, mapName);
 			}
 
-			if (gameTile == null)
+			if (gameObjects.Count == 0)
 			{
 				// TODO Get text from const file
 				LogMaster.GetInstance().WriteLog("There is nothing.");
 				canPlace = false;
 			}
-			else if (gameTile.Space == null)
+			else
 			{
-				// TODO Get text from const file
-				LogMaster.GetInstance().WriteLog("Character is must exist on space!");
-				canPlace = false;
-			}
-			// TODO Process Terrain case. (if terrain is wall, can't place when usually)
-			else if (gameTile.Terrain != null)
-			{
-				if (gameTile.Terrain is WallGameObject)
+				GameObject terrainGameObject = FindGameObjectAsTag(gameObjects, TagConst.TERRAIN);
+
+				if (FindGameObjectAsTag(gameObjects, TagConst.CHARACTER) != null)
 				{
-					LogMaster.GetInstance().WriteLog("There is wall.");
+					// TODO Get text from const file
+					LogMaster.GetInstance().WriteLog("There is other character");
 					canPlace = false;
 				}
-				else if (gameTile.Terrain is StairGameObject stair)
+				else if (terrainGameObject != null)
 				{
-					LogMaster.GetInstance().WriteLog("Move to : " + stair.ToGameMapName);
-					canPlace = false;
-					// Move through stair
-					PlaceCharacter(character, stair.ToX, stair.ToY, stair.ToGameMapName);
-				}
-				else if (gameTile.Terrain is ExitGameObject)
-				{
-					// Player has escaped!
-					if (character is PlayerGameObject)
+					if (terrainGameObject is WallGameObject)
 					{
-						GameClear();
+						LogMaster.GetInstance().WriteLog("There is wall.");
+						canPlace = false;
+					}
+					else if (terrainGameObject is StairGameObject stair)
+					{
+						LogMaster.GetInstance().WriteLog("Move to : " + stair.ToGameMapName);
+						canPlace = false;
+						// Move through stair
+						PlaceCharacter(character, stair.ToX, stair.ToY, stair.ToGameMapName);
+					}
+					else if (terrainGameObject is ExitGameObject)
+					{
+						// Player has escaped!
+						if (character is PlayerGameObject)
+						{
+							GameClear();
+						}
 					}
 				}
-			}
-			else if (gameTile.Character != null)
-			{
-				// TODO Get text from const file
-				LogMaster.GetInstance().WriteLog("There is other character");
-				canPlace = false;
-			}
+				else if (FindGameObjectAsTag(gameObjects, TagConst.SPACE) == null)
+				{
+					// TODO Get text from const file
+					LogMaster.GetInstance().WriteLog("Character is must exist on space!");
+					canPlace = false;
+				}
+			}			
 
 			if (canPlace)
 			{
-				// Place character
-				gameTile.Character = character;
-
-				// Move from tile to other tile
-				if (character.GameTile != null)
-				{
-					// Before location info
-					character.GameTile.Character = null;
-				}
-				// After location info
-				character.GameTile = gameTile;
-
 				character.X = x;
 				character.Y = y;
 
 				// Move to other game map
 				if (mapName != "")
 				{
-					MapMaster.GetInstance().SetCurrentMap(mapName);
+					RemoveGameObject(Player);
+					GameObjects = MapMaster.GetInstance().GetMap(mapName);
+					AddGameObject(Player);
 				}
 			}
-
-			return gameTile;
 		}
 
 		/// <summary>
@@ -280,13 +272,32 @@ namespace Top2dGame.Client.Master
 		}
 
 		/// <summary>
+		/// Find game object as tag
+		/// </summary>
+		/// <param name="gameObjects">Game objects to find target</param>
+		/// <param name="tag">Tag</param>
+		/// <returns>Found game object</returns>
+		public GameObject FindGameObjectAsTag(IList<GameObject> gameObjects, int tag)
+		{
+			foreach (GameObject gameObject in gameObjects)
+			{
+				if (gameObject.HasTag(tag))
+				{
+					return gameObject;
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// Init player (TODO this method is temp. load player info from other file)
 		/// </summary>
 		private void InitPlayer()
 		{
 			CharacterStatusScript playerStatus = Player.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
 			int healthPoint = 10;
-			int satiation = 5;
+			int satiation = 50;
 
 			playerStatus.HealthPoint = healthPoint;
 			playerStatus.MaxHealthPoint = healthPoint;

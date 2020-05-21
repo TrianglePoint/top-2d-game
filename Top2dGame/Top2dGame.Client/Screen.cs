@@ -160,9 +160,9 @@ namespace Top2dGame.Client
 			ChasePlayer(gameMaster.Player);
 
 			currentScreenInfo = CreateScreenInfo(Width, Height);
-			SetGameObjects(gameMaster, GameTileConst.SPACE, currentScreenInfo);
-			SetGameObjects(gameMaster, GameTileConst.TERRAIN, currentScreenInfo);
-			SetGameObjects(gameMaster, GameTileConst.CHARACTER, currentScreenInfo);
+			SetGameObjects(gameMaster, TagConst.SPACE, currentScreenInfo);
+			SetGameObjects(gameMaster, TagConst.TERRAIN, currentScreenInfo);
+			SetGameObjects(gameMaster, TagConst.CHARACTER, currentScreenInfo);
 
 			SetPlayerInfo(currentScreenInfo);
 			SetPlayerLocation(currentScreenInfo);
@@ -261,39 +261,24 @@ namespace Top2dGame.Client
 		/// Set game objects into current screen info
 		/// </summary>
 		/// <param name="gameMaster">Game master</param>
-		/// <param name="tileType">Tile type</param>
+		/// <param name="tag">Game object tag</param>
 		/// <param name="currentScreenInfo">Current screen info</param>
-		private void SetGameObjects(GameMaster gameMaster, int tileType, IList<IList<string>> currentScreenInfo)
+		private void SetGameObjects(GameMaster gameMaster, int tag, IList<IList<string>> currentScreenInfo)
 		{
 			// Show screen as Screen location and sight
 			for (int i = 0, x = X - SightWidth; i < SightWidth * 2 + 1; i++, x++)
 			{
 				for (int j = 0, y = Y - SightHeight; j < SightHeight * 2 + 1; j++, y++)
 				{
-					TileGameObject gameTile = gameMaster.GetGameTile(x, y);
+					IList<GameObject> gameObjects = gameMaster.GetGameObjects(x, y);
 
-					if (gameTile != null)
+					if (gameObjects.Count != 0)
 					{
-						if (tileType == GameTileConst.CHARACTER && gameTile.Character != null)
+						GameObject gameObject = gameMaster.FindGameObjectAsTag(gameObjects, tag);
+						if (gameObject != null)
 						{
 							int top = j;
-							foreach (string sprite in gameTile.Character.Sprite)
-							{
-								SetScreenInfo(currentScreenInfo, i, top++, sprite);
-							}
-						}
-						else if (tileType == GameTileConst.TERRAIN && gameTile.Terrain != null)
-						{
-							int top = j;
-							foreach (string sprite in gameTile.Terrain.Sprite)
-							{
-								SetScreenInfo(currentScreenInfo, i, top++, sprite);
-							}
-						}
-						else if (tileType == GameTileConst.SPACE && gameTile.Space != null)
-						{
-							int top = j;
-							foreach (string sprite in gameTile.Space.Sprite)
+							foreach (string sprite in gameObject.Sprite)
 							{
 								SetScreenInfo(currentScreenInfo, i, top++, sprite);
 							}

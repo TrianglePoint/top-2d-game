@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
-using Top2dGame.Model.Sprite;
+using Top2dGame.Model.Const;
 
 namespace Top2dGame.Client.GameObjects.Tile
 {
@@ -20,6 +20,11 @@ namespace Top2dGame.Client.GameObjects.Tile
 		/// To location Y
 		/// </summary>
 		public int ToY { get; set; }
+
+		public StairGameObject()
+		{
+			SetTag(TagConst.TERRAIN, true);
+		}
 
 		protected override void AddScript() { }
 	}

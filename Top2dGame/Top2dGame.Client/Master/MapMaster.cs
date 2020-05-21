@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Tile;
 
 namespace Top2dGame.Client.Master
@@ -16,19 +17,14 @@ namespace Top2dGame.Client.Master
 		/// <summary>
 		/// Game maps
 		/// </summary>
-		public Dictionary<string, IList<TileGameObject>> GameMaps { get; set; }
-		
-		/// <summary>
-		/// Game tile list
-		/// </summary>
-		private IList<TileGameObject> CurrentGameMap { get; set; }
+		public Dictionary<string, IList<GameObject>> GameMaps { get; set; }
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		private MapMaster()
 		{
-			GameMaps = new Dictionary<string, IList<TileGameObject>>
+			GameMaps = new Dictionary<string, IList<GameObject>>
 			{
 				// TODO this is temp process. add load map from file.
 				{ "map1", CreateGameMap1(20, 20) },
@@ -50,29 +46,11 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		/// <param name="mapName">Map name</param>
 		/// <returns>Current game map</returns>
-		public IList<TileGameObject> GetMap(string mapName)
+		public IList<GameObject> GetMap(string mapName)
 		{
 			return GameMaps[mapName];
 		}
 
-		/// <summary>
-		/// Set current game map
-		/// </summary>
-		/// <param name="mapName">Map name</param>
-		public void SetCurrentMap(string mapName)
-		{
-			CurrentGameMap = GameMaps[mapName];
-		}
-
-		/// <summary>
-		/// Get current game map
-		/// </summary>
-		/// <returns>Current game map</returns>
-		public IList<TileGameObject> GetCurrentMap()
-		{
-			return CurrentGameMap;
-		}
-
 		// TODO import from file
 		/// <summary>
 		/// Create game map
@@ -80,65 +58,66 @@ namespace Top2dGame.Client.Master
 		/// <param name="horizontal">Map size</param>
 		/// <param name="vertical">Map size</param>
 		/// <returns>Game map</returns>
-		private IList<TileGameObject> CreateGameMap1(int horizontal, int vertical)
+		private IList<GameObject> CreateGameMap1(int horizontal, int vertical)
 		{
-			IList<TileGameObject> gameMap = new List<TileGameObject>();
+			IList<GameObject> gameMap = new List<GameObject>();
 			for (int x = 0; x < horizontal; x++)
 			{
 				for (int y = 0; y < vertical; y++)
 				{
-					int num = new System.Random().Next(10);
-					if ((x == 2 && y == 4) || num != 0)
+					if ((x == 2 && y == 4))
 					{
-						gameMap.Add(new TileGameObject
+						gameMap.Add(new SpaceGameObject
 						{
 							X = x,
 							Y = y
 						});
 					}
-					else if ((x == 2 && y == 3) || num != 0)
+					else if ((x == 2 && y == 3))
 					{
-						gameMap.Add(new TileGameObject
+						gameMap.Add(new SpaceGameObject
 						{
 							X = x,
 							Y = y
 						});
 					}
-					else if ((x == 0 && y == 0) || num != 0)
+					else if ((x == 0 && y == 0))
 					{
-						gameMap.Add(new TileGameObject
+						gameMap.Add(new SpaceGameObject
+						{
+							X = x,
+							Y = y
+						});
+						gameMap.Add(new StairGameObject
+						{
+							X = x,
+							Y = y,
+							ToGameMapName = "map2",
+							ToX = 2,
+							ToY = 4
+						});
+					}
+					else if ((x == 1 && y == 2))
+					{
+						gameMap.Add(new SpaceGameObject
+						{
+							X = x,
+							Y = y
+						});
+						gameMap.Add(new WallGameObject
 						{
 							X = x,
 							Y = y
 						});
 					}
-					else if ((x == 1 && y == 2) || num != 0)
+					else if (new System.Random().Next(10) != 0)
 					{
-						gameMap.Add(new TileGameObject
+						gameMap.Add(new SpaceGameObject
 						{
 							X = x,
 							Y = y
 						});
 					}
-				}
-			}
-
-			CreaeSpace(gameMap);
-
-			foreach (TileGameObject gameTile in gameMap)
-			{
-				if (gameTile.X == 0 && gameTile.Y == 0)
-				{
-					gameTile.Terrain = new StairGameObject
-					{
-						ToGameMapName = "map2",
-						ToX = 2, 
-						ToY = 4
-					};
-				}
-				else if (gameTile.X == 1 && gameTile.Y == 2)
-				{
-					gameTile.Terrain = new WallGameObject();
 				}
 			}
 
@@ -152,86 +131,75 @@ namespace Top2dGame.Client.Master
 		/// <param name="horizontal">Map size</param>
 		/// <param name="vertical">Map size</param>
 		/// <returns>Game map</returns>
-		private IList<TileGameObject> CreateGameMap2(int horizontal, int vertical)
+		private IList<GameObject> CreateGameMap2(int horizontal, int vertical)
 		{
-			IList<TileGameObject> gameMap = new List<TileGameObject>();
+			IList<GameObject> gameMap = new List<GameObject>();
 			for (int x = 0; x < horizontal; x++)
 			{
 				for (int y = 0; y < vertical; y++)
 				{
-					int num = new System.Random().Next(10);
-					if ((x == 2 && y == 4) || num != 0)
+					if ((x == 2 && y == 4))
 					{
-						gameMap.Add(new TileGameObject
+						gameMap.Add(new SpaceGameObject
 						{
 							X = x,
 							Y = y
 						});
 					}
-					else if ((x == 6 && y == 6) || num != 0)
+					else if ((x == 6 && y == 6))
 					{
-						gameMap.Add(new TileGameObject
+						gameMap.Add(new SpaceGameObject
+						{
+							X = x,
+							Y = y
+						});
+						gameMap.Add(new StairGameObject
+						{
+							X = x,
+							Y = y,
+							ToGameMapName = "map1",
+							ToX = 2,
+							ToY = 4
+						});
+					}
+					else if ((x == 2 && y == 1))
+					{
+						gameMap.Add(new SpaceGameObject
+						{
+							X = x,
+							Y = y
+						});
+						gameMap.Add(new WallGameObject
 						{
 							X = x,
 							Y = y
 						});
 					}
-					else if ((x == 2 && y == 1) || num != 0)
+					else if ((x == 5 && y == 5))
 					{
-						gameMap.Add(new TileGameObject
+						gameMap.Add(new SpaceGameObject
+						{
+							X = x,
+							Y = y
+						});
+						gameMap.Add(new ExitGameObject
 						{
 							X = x,
 							Y = y
 						});
 					}
-					else if ((x == 5 && y == 5) || num != 0)
+					else if (new System.Random().Next(10) != 0)
 					{
-						gameMap.Add(new TileGameObject
+						gameMap.Add(new SpaceGameObject
 						{
 							X = x,
 							Y = y
 						});
 					}
-				}
-			}
-
-			CreaeSpace(gameMap);
-
-			foreach (TileGameObject gameTile in gameMap)
-			{
-				if (gameTile.X == 6 && gameTile.Y == 6)
-				{
-					gameTile.Terrain = new StairGameObject
-					{
-						ToGameMapName = "map1",
-						ToX = 2,
-						ToY = 4
-					};
-				}
-				else if (gameTile.X == 2 && gameTile.Y == 1)
-				{
-					gameTile.Terrain = new WallGameObject();
-				}
-				else if (gameTile.X == 5 && gameTile.Y == 5)
-				{
-					gameTile.Terrain = new ExitGameObject();
 				}
 			}
 
 			return gameMap;
-		}
-
-		/// <summary>
-		/// Create space.
-		/// </summary>
-		/// <param name="gameMap">Game map</param>
-		private void CreaeSpace(IList<TileGameObject> gameMap)
-		{
-			// TODO Use other way. (Random, import from file)
-			foreach (TileGameObject gameTile in gameMap)
-			{
-				gameTile.Space = new SpaceGameObject();
-			}
 		}
 	}
 }

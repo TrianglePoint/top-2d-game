@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.Scripts.Character;
-using Top2dGame.Model.Sprite;
+using Top2dGame.Model.Const;
 
 namespace Top2dGame.Client.GameObjects.Tile
 {
@@ -9,7 +9,10 @@ namespace Top2dGame.Client.GameObjects.Tile
 	{
 		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Character).ToString() };
 
-		public TileGameObject GameTile { get; set; }
+		public CharacterGameObject()
+		{
+			SetTag(TagConst.CHARACTER, true);
+		}
 
 		protected override void AddScript()
 		{
