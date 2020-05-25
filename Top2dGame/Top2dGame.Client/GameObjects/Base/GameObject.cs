@@ -8,6 +8,10 @@ namespace Top2dGame.Client.GameObjects.Base
 	public abstract class GameObject
 	{
 		/// <summary>
+		/// Current map name
+		/// </summary>
+		public string MapName { get; set; }
+		/// <summary>
 		/// Location X
 		/// </summary>
 		public int X { get; set; }
@@ -31,8 +35,9 @@ namespace Top2dGame.Client.GameObjects.Base
 		/// </summary>
 		public IList<GameScript> Scripts { get; set; }
 
-		protected GameObject()
+		protected GameObject(string currentMapName)
 		{
+			MapName = currentMapName;
 			Scripts = new List<GameScript>();
 			AddScript();
 		}
@@ -42,7 +47,7 @@ namespace Top2dGame.Client.GameObjects.Base
 		/// </summary>
 		public void Destroy()
 		{
-			GameMaster.GetInstance().RemoveGameObject(this);
+			GameMaster.GetInstance().RemoveGameObject(this, MapName);
 		}
 
 		/// <summary>

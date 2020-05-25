@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Top2dGame.Client.GameObjects.Tile;
+using Top2dGame.Client.GameObjects.Character;
 using Top2dGame.Client.Scripts.Player;
-using Top2dGame.Model.Const;
+using Top2dGame.Model.Enum;
 
 namespace Top2dGame.Client.GameObjects.Player
 {
@@ -9,7 +9,7 @@ namespace Top2dGame.Client.GameObjects.Player
 	{
 		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Player).ToString() };
 
-		public PlayerGameObject() : base()
+		public PlayerGameObject(string currentMapName) : base(currentMapName)
 		{
 			SetTag(TagConst.PLAYER, true);
 		}

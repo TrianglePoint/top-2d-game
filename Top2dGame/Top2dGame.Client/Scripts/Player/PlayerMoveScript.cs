@@ -1,6 +1,7 @@
 ﻿using SharpDX.XInput;
 using System;
 using Top2dGame.Client.GameObjects.Base;
+using Top2dGame.Client.GameObjects.Character;
 using Top2dGame.Client.Master;
 using Top2dGame.Client.Scripts.Base;
 
@@ -50,8 +51,8 @@ namespace Top2dGame.Client.Scripts.Player
 			if (Controller.IsConnected)
 			{
 				bool inputted = false;
-				int newX = gameMaster.Player.X;
-				int newY = gameMaster.Player.Y;
+				int newX = GameObject.X;
+				int newY = GameObject.Y;
 
 				Controller.GetState(out State state);
 
@@ -81,7 +82,7 @@ namespace Top2dGame.Client.Scripts.Player
 
 				if (inputted)
 				{
-					gameMaster.PlaceCharacter(gameMaster.Player, newX, newY);
+					gameMaster.PlaceCharacter(GameObject as CharacterGameObject, newX, newY);
 					gameMaster.NextTurn();
 
 					Time = currentTime + InputInterval * TimeSpan.TicksPerMillisecond;

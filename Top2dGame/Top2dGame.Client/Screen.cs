@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Player;
-using Top2dGame.Client.GameObjects.Tile;
 using Top2dGame.Client.Master;
 using Top2dGame.Client.Scripts.Character;
-using Top2dGame.Model.Const;
+using Top2dGame.Model.Enum;
 
 namespace Top2dGame.Client
 {

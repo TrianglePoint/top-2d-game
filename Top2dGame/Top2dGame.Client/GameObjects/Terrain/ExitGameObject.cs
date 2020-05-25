@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
-using Top2dGame.Model.Const;
+using Top2dGame.Model.Enum;
 
-namespace Top2dGame.Client.GameObjects.Tile
+namespace Top2dGame.Client.GameObjects.Terrain
 {
 	public class ExitGameObject : GameObject
 	{
 		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Exit).ToString() };
 
-		public ExitGameObject()
+		public ExitGameObject(string currentMapName) : base(currentMapName)
 		{
 			SetTag(TagConst.TERRAIN, true);
 		}

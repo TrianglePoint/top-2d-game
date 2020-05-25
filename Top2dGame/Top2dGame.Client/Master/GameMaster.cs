@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
+using Top2dGame.Client.GameObjects.Character;
 using Top2dGame.Client.GameObjects.Player;
-using Top2dGame.Client.GameObjects.Tile;
+using Top2dGame.Client.GameObjects.Terrain;
 using Top2dGame.Client.Scripts.Base;
 using Top2dGame.Client.Scripts.Character;
-using Top2dGame.Model.Const;
+using Top2dGame.Model.Enum;
 
 namespace Top2dGame.Client.Master
 {
@@ -21,11 +22,6 @@ namespace Top2dGame.Client.Master
 		private static readonly GameMaster Instance = new GameMaster();
 
 		/// <summary>
-		/// Game objects
-		/// </summary>
-		private IList<GameObject> GameObjects { get; set; }
-
-		/// <summary>
 		/// Player information
 		/// </summary>
 		public PlayerGameObject Player { get; set; }
@@ -40,7 +36,6 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		private GameMaster()
 		{
-			Player = new PlayerGameObject();
 			IsGameClear = false;
 		}
 
@@ -54,21 +49,23 @@ namespace Top2dGame.Client.Master
 		}
 
 		/// <summary>
-		/// Add specified game object to game master
+		/// Add specified game object to specified map
 		/// </summary>
 		/// <param name="gameObject">Game object to add</param>
-		public void AddGameObject(GameObject gameObject)
+		/// <param name="mapName">Target map name</param>
+		public void AddGameObject(GameObject gameObject, string mapName)
 		{
-			GameObjects.Add(gameObject);
+			MapMaster.GetInstance().GetMap(mapName).Add(gameObject);
 		}
 
 		/// <summary>
-		/// Remove specified game object from game master
+		/// Remove specified game object from specified map
 		/// </summary>
 		/// <param name="gameObject">Game object to remove</param>
-		public void RemoveGameObject(GameObject gameObject)
+		/// <param name="mapName">Target map name</param>
+		public void RemoveGameObject(GameObject gameObject, string mapName)
 		{
-			GameObjects.Remove(gameObject);
+			MapMaster.GetInstance().GetMap(mapName).Remove(gameObject);
 		}
 
 		/// <summary>
@@ -76,9 +73,12 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		public void GameStart()
 		{
-			GameObjects = MapMaster.GetInstance().GetMap("map1");
+			string mapName = "map1";
+
+			MapMaster.GetInstance().SetCurrentMap(mapName);
+			Player = new PlayerGameObject(mapName);
 			InitPlayer();
-			AddGameObject(Player);
+			AddGameObject(Player, Player.MapName);
 		}
 
 		/// <summary>
@@ -91,14 +91,14 @@ namespace Top2dGame.Client.Master
 		{
 			IList<GameObject> gameObjects = new List<GameObject>();
 
-			if (GameObjects == null)
+			if (MapMaster.GetInstance().GetCurrentMap() == null)
 			{
 				// TODO Print text "No Game map!" in textLog section
 
 				return gameObjects;
 			}
 
-			foreach (GameObject gameObject in GameObjects)
+			foreach (GameObject gameObject in MapMaster.GetInstance().GetCurrentMap())
 			{
 				if (gameObject.X == x && gameObject.Y == y)
 				{
@@ -124,7 +124,6 @@ namespace Top2dGame.Client.Master
 			if (mapMaster.GetMap(mapName) == null)
 			{
 				// TODO Print text "No Game map!" in textLog section
-
 				return gameObjects;
 			}
 
@@ -145,19 +144,20 @@ namespace Top2dGame.Client.Master
 		/// <param name="character">Character</param>
 		/// <param name="x">Location x</param>
 		/// <param name="y">Location y</param>
+		/// <param name="toMapName">Map name to move</param>
 		/// <returns>Placed game tile</returns>
-		public void PlaceCharacter(CharacterGameObject character, int x, int y, string mapName = "")
+		public void PlaceCharacter(CharacterGameObject character, int x, int y, string toMapName = "")
 		{
 			bool canPlace = true;
 			IList<GameObject> gameObjects;
 
-			if (mapName == "")
+			if (toMapName == "")
 			{
-				gameObjects = GetGameObjects(x, y);
+				gameObjects = GetGameObjects(x, y, character.MapName);
 			}
 			else
 			{
-				gameObjects = GetGameObjects(x, y, mapName);
+				gameObjects = GetGameObjects(x, y, toMapName);
 			}
 
 			if (gameObjects.Count == 0)
@@ -172,8 +172,7 @@ namespace Top2dGame.Client.Master
 
 				if (FindGameObjectAsTag(gameObjects, TagConst.CHARACTER) != null)
 				{
-					// TODO Get text from const file
-					LogMaster.GetInstance().WriteLog("There is other character");
+					// Attack event
 					canPlace = false;
 				}
 				else if (terrainGameObject != null)
@@ -213,11 +212,15 @@ namespace Top2dGame.Client.Master
 				character.Y = y;
 
 				// Move to other game map
-				if (mapName != "")
+				if (toMapName != "")
 				{
-					RemoveGameObject(Player);
-					GameObjects = MapMaster.GetInstance().GetMap(mapName);
-					AddGameObject(Player);
+					RemoveGameObject(character, character.MapName);
+					if (character == Player)
+					{
+						MapMaster.GetInstance().SetCurrentMap(toMapName);
+					}
+					character.MapName = toMapName;
+					AddGameObject(character, character.MapName);
 				}
 			}
 		}
@@ -246,12 +249,19 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		public void ProcessUpdate()
 		{
+			MapMaster mapMaster = MapMaster.GetInstance();
+
 			// TODO Is it fine when remove game object?
-			for (int i = 0; i < GameObjects.Count; i++)
+			foreach (string mapName in mapMaster.GetMapNameList())
 			{
-				foreach (GameScript script in GameObjects[i].Scripts)
+				IList<GameObject> map = mapMaster.GetMap(mapName);
+
+				for (int i = 0; i < map.Count; i++)
 				{
-					script.Update();
+					foreach (GameScript script in map[i].Scripts)
+					{
+						script.Update();
+					}
 				}
 			}
 		}
@@ -261,12 +271,19 @@ namespace Top2dGame.Client.Master
 		/// </summary>
 		public void NextTurn()
 		{
+			MapMaster mapMaster = MapMaster.GetInstance();
+
 			// TODO Is it fine when remove game object?
-			for (int i = 0; i < GameObjects.Count; i++)
+			foreach (string mapName in mapMaster.GetMapNameList())
 			{
-				foreach (GameScript script in GameObjects[i].Scripts)
+				IList<GameObject> map = mapMaster.GetMap(mapName);
+
+				for (int i = 0; i < map.Count; i++)
 				{
-					script.UpdateEveryTurn();
+					foreach (GameScript script in map[i].Scripts)
+					{
+						script.UpdateEveryTurn();
+					}
 				}
 			}
 		}
