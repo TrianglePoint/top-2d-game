@@ -6,6 +6,8 @@ namespace Top2dGame.Client.GameObjects.Terrain
 {
 	public class WallGameObject : GameObject
 	{
+		public override string Name => "Wall";
+
 		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Wall).ToString() };
 
 		public WallGameObject(string currentMapName) : base(currentMapName)

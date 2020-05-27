@@ -1,5 +1,6 @@
 ﻿using System;
 using Top2dGame.Client.GameObjects.Base;
+using Top2dGame.Client.GameObjects.Character;
 using Top2dGame.Client.Master;
 using Top2dGame.Client.Scripts.Base;
 
@@ -26,6 +27,11 @@ namespace Top2dGame.Client.Scripts.Character
 		/// Max satiation
 		/// </summary>
 		public int MaxSatiation { get; set; }
+
+		/// <summary>
+		/// Attack point
+		/// </summary>
+		public int AttackPoint { get; set; }
 
 		public CharacterStatusScript(GameObject gameObject) : base(gameObject) { }
 
@@ -74,8 +80,30 @@ namespace Top2dGame.Client.Scripts.Character
 		/// <returns></returns>
 		private void Die()
 		{
-			LogMaster.GetInstance().WriteLog("Character is dead.");
+			LogMaster.GetInstance().WriteLog(GameObject.Name + " is dead.");
+
+			if (GameObject is CharacterGameObject)
+			{
+				(GameObject as CharacterGameObject).IsAlive = false;
+			}
+
 			GameObject.Destroy();
+		}
+
+		/// <summary>
+		/// Take damage event
+		/// </summary>
+		/// <param name="attackPoint">Attack point</param>
+		public void TakeDamage(int attackPoint)
+		{
+			HealthPoint -= attackPoint;
+
+			if (IsHpZero())
+			{
+				Die();
+			}
+
+			HealthPoint = Math.Clamp(HealthPoint, 0, MaxHealthPoint);
 		}
 	}
 }

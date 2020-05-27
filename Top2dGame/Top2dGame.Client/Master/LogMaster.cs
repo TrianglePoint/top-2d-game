@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Top2dGame.Client.Master
 {
@@ -42,16 +41,12 @@ namespace Top2dGame.Client.Master
 		/// <returns>Log</returns>
 		public string GetLogFromLatest(int index)
 		{
-			string log;
+			string log = string.Empty;
+			int realIndex = LogList.Count - 1 - index;
 
-			try
+			if (realIndex >= 0 && realIndex < LogList.Count)
 			{
 				log = LogList[LogList.Count - 1 - index];
-			}
-			// Incorrect index
-			catch (ArgumentOutOfRangeException)
-			{
-				log = string.Empty;
 			}
 
 			return log;
@@ -63,16 +58,7 @@ namespace Top2dGame.Client.Master
 		/// <param name="log">log data</param>
 		public void WriteLog(string log)
 		{
-			// TODO Process way of print log
-			const int MAX_LENGTH = 20;
-
-			if (log.Length > MAX_LENGTH)
-			{
-				log = log.Substring(0, MAX_LENGTH);
-			}
-
-			// Fill white space to right side.
-			LogList.Add(string.Format("{0, -" + MAX_LENGTH + "}", log));
+			LogList.Add(log);
 		}
 	}
 }

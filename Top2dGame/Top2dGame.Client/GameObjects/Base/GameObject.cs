@@ -26,6 +26,11 @@ namespace Top2dGame.Client.GameObjects.Base
 		public long Tag { get; set; }
 
 		/// <summary>
+		/// Game object name (displayed on screen)
+		/// </summary>
+		public virtual string Name { get; }
+
+		/// <summary>
 		/// Sprite displayed on the screen (Use SpriteEnum or specified text)
 		/// </summary>
 		public virtual IList<string> Sprite { get; }
@@ -40,6 +45,14 @@ namespace Top2dGame.Client.GameObjects.Base
 			MapName = currentMapName;
 			Scripts = new List<GameScript>();
 			AddScript();
+		}
+
+		/// <summary>
+		/// Create game object
+		/// </summary>
+		public void Create()
+		{
+			GameMaster.GetInstance().AddGameObject(this, MapName);
 		}
 
 		/// <summary>

@@ -7,6 +7,8 @@ namespace Top2dGame.Client.GameObjects.Player
 {
 	public class PlayerGameObject : CharacterGameObject
 	{
+		public override string Name => "Player";
+
 		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Player).ToString() };
 
 		public PlayerGameObject(string currentMapName) : base(currentMapName)

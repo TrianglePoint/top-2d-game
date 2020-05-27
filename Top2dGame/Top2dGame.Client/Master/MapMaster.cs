@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
+using Top2dGame.Client.GameObjects.Enemy;
 using Top2dGame.Client.GameObjects.Space;
 using Top2dGame.Client.GameObjects.Terrain;
+using Top2dGame.Client.Scripts.Character;
 
 namespace Top2dGame.Client.Master
 {
@@ -147,6 +149,31 @@ namespace Top2dGame.Client.Master
 							X = x,
 							Y = y
 						});
+					}
+					else if ((x == 3 && y == 3))
+					{
+						ScarecrowGameObject scarecrow = new ScarecrowGameObject(mapName)
+						{
+							X = x,
+							Y = y
+						};
+						CharacterStatusScript scarecrowStatus = scarecrow.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
+						int healthPoint = 3;
+						int satiation = 999;
+
+						scarecrowStatus.HealthPoint = healthPoint;
+						scarecrowStatus.MaxHealthPoint = healthPoint;
+						scarecrowStatus.Satiation = satiation;
+						scarecrowStatus.MaxSatiation = satiation;
+						scarecrowStatus.AttackPoint = 0;
+
+						gameMap.Add(new SpaceGameObject(mapName)
+						{
+							X = x,
+							Y = y
+						});
+						
+						gameMap.Add(scarecrow);
 					}
 					else if (new System.Random().Next(10) != 0)
 					{

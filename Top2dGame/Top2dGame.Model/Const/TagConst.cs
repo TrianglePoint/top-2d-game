@@ -6,5 +6,6 @@
 		public static int PLAYER { get => 2; }
 		public static int SPACE { get => 3; }
 		public static int TERRAIN { get => 4; }
+		public static int ENEMY { get => 5; }
 	}
 }

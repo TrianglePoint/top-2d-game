@@ -32,11 +32,17 @@ namespace Top2dGame.Client.Master
 		public bool IsGameClear { get; set; }
 
 		/// <summary>
+		/// Is game over
+		/// </summary>
+		public bool IsGameOver { get; set; }
+
+		/// <summary>
 		/// Constructor
 		/// </summary>
 		private GameMaster()
 		{
 			IsGameClear = false;
+			IsGameOver = false;
 		}
 
 		/// <summary>
@@ -78,7 +84,7 @@ namespace Top2dGame.Client.Master
 			MapMaster.GetInstance().SetCurrentMap(mapName);
 			Player = new PlayerGameObject(mapName);
 			InitPlayer();
-			AddGameObject(Player, Player.MapName);
+			Player.Create();
 		}
 
 		/// <summary>
@@ -169,17 +175,23 @@ namespace Top2dGame.Client.Master
 			else
 			{
 				GameObject terrainGameObject = FindGameObjectAsTag(gameObjects, TagConst.TERRAIN);
+				GameObject otherGameObject = FindGameObjectAsTag(gameObjects, TagConst.CHARACTER);
 
-				if (FindGameObjectAsTag(gameObjects, TagConst.CHARACTER) != null)
+				if (otherGameObject != null)
 				{
 					// Attack event
+					CharacterStatusScript characterStatus = character.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;					
+					CharacterStatusScript otherStatus = otherGameObject.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
+
+					LogMaster.GetInstance().WriteLog(string.Format("{0} attack {1} damage to {2}.", character.Name, characterStatus.AttackPoint, otherGameObject.Name));
+					otherStatus.TakeDamage(characterStatus.AttackPoint);
 					canPlace = false;
 				}
 				else if (terrainGameObject != null)
 				{
 					if (terrainGameObject is WallGameObject)
 					{
-						LogMaster.GetInstance().WriteLog("There is wall.");
+						LogMaster.GetInstance().WriteLog(string.Format("There is {0}.", terrainGameObject.Name));
 						canPlace = false;
 					}
 					else if (terrainGameObject is StairGameObject stair)
@@ -197,12 +209,6 @@ namespace Top2dGame.Client.Master
 							GameClear();
 						}
 					}
-				}
-				else if (FindGameObjectAsTag(gameObjects, TagConst.SPACE) == null)
-				{
-					// TODO Get text from const file
-					LogMaster.GetInstance().WriteLog("Character is must exist on space!");
-					canPlace = false;
 				}
 			}			
 
@@ -231,6 +237,14 @@ namespace Top2dGame.Client.Master
 		private void GameClear()
 		{
 			IsGameClear = true;
+		}
+
+		/// <summary>
+		/// Process game over
+		/// </summary>
+		private void GameOver()
+		{
+			IsGameOver = true;
 		}
 
 		/// <summary>
@@ -286,6 +300,8 @@ namespace Top2dGame.Client.Master
 					}
 				}
 			}
+
+			CheckGameOver();
 		}
 
 		/// <summary>
@@ -320,6 +336,18 @@ namespace Top2dGame.Client.Master
 			playerStatus.MaxHealthPoint = healthPoint;
 			playerStatus.Satiation = satiation;
 			playerStatus.MaxSatiation = satiation;
+			playerStatus.AttackPoint = 1;
+		}
+
+		/// <summary>
+		/// Check game over
+		/// </summary>
+		private void CheckGameOver()
+		{
+			if (!Player.IsAlive)
+			{
+				GameOver();
+			}
 		}
 	}
 }

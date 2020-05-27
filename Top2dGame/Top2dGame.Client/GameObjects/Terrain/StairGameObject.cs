@@ -6,6 +6,8 @@ namespace Top2dGame.Client.GameObjects.Terrain
 {
 	public class StairGameObject : GameObject
 	{
+		public override string Name => "Stair";
+
 		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Stair).ToString() };
 
 		/// <summary>

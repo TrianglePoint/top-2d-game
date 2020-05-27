@@ -146,6 +146,16 @@ namespace Top2dGame.Client
 			IList<IList<string>> currentScreenInfo;
 			GameMaster gameMaster = GameMaster.GetInstance();
 
+			if (gameMaster.IsGameOver)
+			{
+				// TODO Add game over screen
+				Console.Clear();
+				Console.WriteLine("Game over!");
+				Environment.Exit(0);
+
+				return;
+			}
+
 			if (gameMaster.IsGameClear)
 			{
 				// TODO Add game clear screen
@@ -326,14 +336,30 @@ namespace Top2dGame.Client
 		/// <param name="currentScreenInfo">Current screen info</param>
 		private void SetLog(IList<IList<string>> currentScreenInfo)
 		{
-			const int MAX_SHOW = 5;
+			const int MAX_SHOW_ROW = 6;
 
 			LogMaster logMaster = LogMaster.GetInstance();
 
-			for (int i = 0; i < MAX_SHOW; i++)
+			for (int i = 0, printCount = 0; printCount < MAX_SHOW_ROW; i++)
 			{
-				// TODO Get cursorPosition from other.
-				SetScreenInfo(currentScreenInfo, 0, SightHeight * 2 + 4 + i, logMaster.GetLogFromLatest(i));
+				string log = logMaster.GetLogFromLatest(i);
+
+				do
+				{
+					SetScreenInfo(currentScreenInfo, 0, SightHeight * 2 + 4 + printCount, log);
+					printCount++;
+
+					// Need line break
+					if (log.Length > Width)
+					{
+						log = log.Substring(Width);
+					}
+					// Done one log
+					else
+					{
+						break;
+					}
+				} while (printCount < MAX_SHOW_ROW);
 			}
 		}
 
