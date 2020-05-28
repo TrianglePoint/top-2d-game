@@ -7,14 +7,13 @@ namespace Top2dGame.Client.GameObjects.Player
 {
 	public class PlayerGameObject : CharacterGameObject
 	{
-		public override string Name => "Player";
-
-		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Player).ToString() };
-
-		public PlayerGameObject(string currentMapName) : base(currentMapName)
+		public PlayerGameObject(string name, string currentMapName) : base(name, currentMapName)
 		{
+			Sprite = new List<string> { ((char)SpriteEnum.Player).ToString() };
 			SetTag(TagConst.PLAYER, true);
 		}
+
+		public PlayerGameObject(string currentMapName) : this("Player", currentMapName) { }
 
 		protected override void AddScript()
 		{

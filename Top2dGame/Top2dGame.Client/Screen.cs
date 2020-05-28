@@ -171,6 +171,7 @@ namespace Top2dGame.Client
 			currentScreenInfo = CreateScreenInfo(Width, Height);
 			SetGameObjects(gameMaster, TagConst.SPACE, currentScreenInfo);
 			SetGameObjects(gameMaster, TagConst.TERRAIN, currentScreenInfo);
+			SetGameObjects(gameMaster, TagConst.ITEM, currentScreenInfo);
 			SetGameObjects(gameMaster, TagConst.CHARACTER, currentScreenInfo);
 
 			SetPlayerInfo(currentScreenInfo);

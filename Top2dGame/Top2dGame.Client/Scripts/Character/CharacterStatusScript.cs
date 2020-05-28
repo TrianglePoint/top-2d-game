@@ -61,8 +61,7 @@ namespace Top2dGame.Client.Scripts.Character
 			}
 
 			HealthPoint = Math.Clamp(HealthPoint, 0, MaxHealthPoint);
-			Satiation = Math.Clamp(Satiation, 0, MaxSatiation);
-			
+			Satiation = Math.Clamp(Satiation, 0, MaxSatiation);			
 		}
 
 		/// <summary>
@@ -104,6 +103,25 @@ namespace Top2dGame.Client.Scripts.Character
 			}
 
 			HealthPoint = Math.Clamp(HealthPoint, 0, MaxHealthPoint);
+		}
+
+		/// <summary>
+		/// Use item event
+		/// </summary>
+		/// <param name="healthEffect">Health effect</param>
+		/// <param name="satisfactionEffect">Satisfaction effect</param>
+		public void UseItem(int healthEffect, int satisfactionEffect)
+		{
+			HealthPoint += healthEffect;
+			Satiation += satisfactionEffect;
+
+			if (IsHpZero())
+			{
+				Die();
+			}
+
+			HealthPoint = Math.Clamp(HealthPoint, 0, MaxHealthPoint);
+			Satiation = Math.Clamp(Satiation, 0, MaxSatiation);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Enemy;
+using Top2dGame.Client.GameObjects.Item;
 using Top2dGame.Client.GameObjects.Space;
 using Top2dGame.Client.GameObjects.Terrain;
 using Top2dGame.Client.Scripts.Character;
@@ -105,23 +106,7 @@ namespace Top2dGame.Client.Master
 			{
 				for (int y = 0; y < vertical; y++)
 				{
-					if ((x == 2 && y == 4))
-					{
-						gameMap.Add(new SpaceGameObject(mapName)
-						{
-							X = x,
-							Y = y
-						});
-					}
-					else if ((x == 2 && y == 3))
-					{
-						gameMap.Add(new SpaceGameObject(mapName)
-						{
-							X = x,
-							Y = y
-						});
-					}
-					else if ((x == 0 && y == 0))
+					if ((x == 0 && y == 0))
 					{
 						gameMap.Add(new SpaceGameObject(mapName)
 						{
@@ -150,6 +135,22 @@ namespace Top2dGame.Client.Master
 							Y = y
 						});
 					}
+					else if ((x == 2 && y == 3))
+					{
+						gameMap.Add(new SpaceGameObject(mapName)
+						{
+							X = x,
+							Y = y
+						});
+					}
+					else if ((x == 2 && y == 4))
+					{
+						gameMap.Add(new SpaceGameObject(mapName)
+						{
+							X = x,
+							Y = y
+						});
+					}
 					else if ((x == 3 && y == 3))
 					{
 						ScarecrowGameObject scarecrow = new ScarecrowGameObject(mapName)
@@ -172,8 +173,36 @@ namespace Top2dGame.Client.Master
 							X = x,
 							Y = y
 						});
-						
+
 						gameMap.Add(scarecrow);
+					}
+					else if ((x == 5 && y == 5))
+					{
+						gameMap.Add(new SpaceGameObject(mapName)
+						{
+							X = x,
+							Y = y
+						});
+						gameMap.Add(new ItemGameObject("Health potion", mapName, 3, 0)
+						{
+							X = x,
+							Y = y,
+							Sprite = new List<string> { "H" }
+						});
+					}
+					else if ((x == 5 && y == 6))
+					{
+						gameMap.Add(new SpaceGameObject(mapName)
+						{
+							X = x,
+							Y = y
+						});
+						gameMap.Add(new ItemGameObject("Scrambled egg", mapName, 1, 50)
+						{
+							X = x,
+							Y = y,
+							Sprite = new List<string> { "S" }
+						});
 					}
 					else if (new System.Random().Next(10) != 0)
 					{

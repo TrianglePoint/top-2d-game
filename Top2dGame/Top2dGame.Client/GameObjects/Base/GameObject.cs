@@ -28,20 +28,21 @@ namespace Top2dGame.Client.GameObjects.Base
 		/// <summary>
 		/// Game object name (displayed on screen)
 		/// </summary>
-		public virtual string Name { get; }
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Sprite displayed on the screen (Use SpriteEnum or specified text)
 		/// </summary>
-		public virtual IList<string> Sprite { get; }
+		public IList<string> Sprite { get; set; }
 
 		/// <summary>
 		/// Scripts
 		/// </summary>
 		public IList<GameScript> Scripts { get; set; }
 
-		protected GameObject(string currentMapName)
+		protected GameObject(string name, string currentMapName)
 		{
+			Name = name;
 			MapName = currentMapName;
 			Scripts = new List<GameScript>();
 			AddScript();

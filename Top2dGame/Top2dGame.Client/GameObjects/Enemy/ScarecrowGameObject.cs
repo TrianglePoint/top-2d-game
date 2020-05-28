@@ -1,19 +1,17 @@
-﻿using System.Collections.Generic;
-using Top2dGame.Client.GameObjects.Character;
+﻿using Top2dGame.Client.GameObjects.Character;
 using Top2dGame.Model.Enum;
 
 namespace Top2dGame.Client.GameObjects.Enemy
 {
 	public class ScarecrowGameObject : CharacterGameObject
 	{
-		public override string Name => "Scarecrow";
-
-		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Character).ToString() };
-
-		public ScarecrowGameObject(string currentMapName) : base(currentMapName)
+		// TODO Change to enemy type (Stasis type?)
+		public ScarecrowGameObject(string name, string currentMapName) : base(name, currentMapName)
 		{
 			SetTag(TagConst.ENEMY, true);
 		}
+
+		public ScarecrowGameObject(string currentMapName) : this("Scarecrow", currentMapName) { }
 
 		protected override void AddScript()
 		{

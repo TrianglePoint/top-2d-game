@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Character;
+using Top2dGame.Client.GameObjects.Item;
 using Top2dGame.Client.GameObjects.Player;
 using Top2dGame.Client.GameObjects.Terrain;
 using Top2dGame.Client.Scripts.Base;
@@ -176,7 +177,8 @@ namespace Top2dGame.Client.Master
 			{
 				GameObject terrainGameObject = FindGameObjectAsTag(gameObjects, TagConst.TERRAIN);
 				GameObject otherGameObject = FindGameObjectAsTag(gameObjects, TagConst.CHARACTER);
-
+				GameObject itemGameObject = FindGameObjectAsTag(gameObjects, TagConst.ITEM);
+				
 				if (otherGameObject != null)
 				{
 					// Attack event
@@ -186,6 +188,16 @@ namespace Top2dGame.Client.Master
 					LogMaster.GetInstance().WriteLog(string.Format("{0} attack {1} damage to {2}.", character.Name, characterStatus.AttackPoint, otherGameObject.Name));
 					otherStatus.TakeDamage(characterStatus.AttackPoint);
 					canPlace = false;
+				}
+				else if (itemGameObject != null)
+				{
+					// Use item
+					ItemGameObject item = itemGameObject as ItemGameObject;
+					CharacterStatusScript characterStatus = character.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
+
+					LogMaster.GetInstance().WriteLog(string.Format("{0} used {1}. : Health({2}), Satisfaction({3})", character.Name, item.Name, item.HealthEffect, item.SatisfactionEffect));
+					characterStatus.UseItem(item.HealthEffect, item.SatisfactionEffect);
+					itemGameObject.Destroy();
 				}
 				else if (terrainGameObject != null)
 				{

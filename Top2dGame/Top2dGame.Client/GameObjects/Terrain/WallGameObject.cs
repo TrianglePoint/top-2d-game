@@ -6,14 +6,13 @@ namespace Top2dGame.Client.GameObjects.Terrain
 {
 	public class WallGameObject : GameObject
 	{
-		public override string Name => "Wall";
-
-		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Wall).ToString() };
-
-		public WallGameObject(string currentMapName) : base(currentMapName)
+		public WallGameObject(string name, string currentMapName) : base(name, currentMapName)
 		{
+			Sprite = new List<string> { ((char)SpriteEnum.Wall).ToString() };
 			SetTag(TagConst.TERRAIN, true);
 		}
+
+		public WallGameObject(string currentMapName) : this("Wall", currentMapName) { }
 
 		protected override void AddScript() { }
 	}

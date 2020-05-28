@@ -6,10 +6,6 @@ namespace Top2dGame.Client.GameObjects.Terrain
 {
 	public class StairGameObject : GameObject
 	{
-		public override string Name => "Stair";
-
-		public override IList<string> Sprite => new List<string> { ((char)SpriteEnum.Stair).ToString() };
-
 		/// <summary>
 		/// To game map name
 		/// </summary>
@@ -23,10 +19,13 @@ namespace Top2dGame.Client.GameObjects.Terrain
 		/// </summary>
 		public int ToY { get; set; }
 
-		public StairGameObject(string currentMapName) : base(currentMapName)
+		public StairGameObject(string name, string currentMapName) : base(name, currentMapName)
 		{
+			Sprite = new List<string> { ((char)SpriteEnum.Stair).ToString() };
 			SetTag(TagConst.TERRAIN, true);
 		}
+
+		public StairGameObject(string currentMapName) : this("Stair", currentMapName) { }
 
 		protected override void AddScript() { }
 	}
