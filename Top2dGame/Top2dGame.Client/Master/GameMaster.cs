@@ -83,7 +83,11 @@ namespace Top2dGame.Client.Master
 			string mapName = "map1";
 
 			MapMaster.GetInstance().SetCurrentMap(mapName);
-			Player = new PlayerGameObject(mapName);
+			Player = new PlayerGameObject
+			{
+				MapName = mapName,
+				Name = "Player"
+			};
 			InitPlayer();
 			Player.Create();
 		}

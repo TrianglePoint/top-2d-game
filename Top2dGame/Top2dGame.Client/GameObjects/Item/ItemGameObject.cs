@@ -16,10 +16,8 @@ namespace Top2dGame.Client.GameObjects.Item
 		/// </summary>
 		public int SatisfactionEffect { get; set; }
 
-		public ItemGameObject(string name, string currentMapName, int healthEffect, int satisfactionEffect) : base(name, currentMapName)
+		public ItemGameObject() : base()
 		{
-			HealthEffect = healthEffect;
-			SatisfactionEffect = satisfactionEffect;
 			SetTag(TagConst.ITEM, true);
 		}
 

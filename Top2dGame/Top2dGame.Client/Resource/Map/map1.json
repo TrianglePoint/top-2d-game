@@ -1,0 +1,110 @@
+[
+  {
+    "Type" : "Space",
+    "Data" : {
+      "X" : 0,
+      "Y" : 0
+    }
+  },
+  {
+    "Type" : "Stair",
+    "Data" : {
+      "X" : 0,
+      "Y" : 0,
+      "ToGameMapName" : "map2",
+      "ToX" : 2,
+      "ToY" : 4
+    }
+  },
+  {
+    "Type" : "Space",
+    "Data" : {
+      "X" : 1,
+      "Y" : 2
+    }
+  },
+  {
+    "Type" : "Wall",
+    "Data" : {
+      "X" : 1,
+      "Y" : 2
+    }
+  },
+  {
+    "Type" : "Space",
+    "Data" : {
+      "X" : 2,
+      "Y" : 3
+    }
+  },
+  {
+    "Type" : "Space",
+    "Data" : {
+      "X" : 2,
+      "Y" : 4
+    }
+  },
+  {
+    "Type" : "Space",
+    "Data" : {
+      "X" : 3,
+      "Y" : 3
+    }
+  },
+  {
+    "Type" : "Enemy",
+    "Data" : {
+      "X" : 3,
+      "Y" : 3,
+      "Name" : "Scarecrow"
+    },
+    "Scripts" : [
+      {
+        "Type" : "CharacterStatus",
+        "Data" : {
+          "HealthPoint" : 3,
+          "MaxHealthPoint" : 3,
+          "Satiation" : 999,
+          "MaxSatiation" : 999,
+          "AttackPoint" : 0
+        }
+      }
+    ]
+  },
+  {
+    "Type" : "Space",
+    "Data" : {
+      "X" : 5,
+      "Y" : 5
+    }
+  },
+  {
+    "Type" : "Item",
+    "Data" : {
+      "X" : 5,
+      "Y" : 5,
+      "Name" : "Health potion",
+      "Sprite" : ["H"],
+      "HealthEffect" : 3,
+      "SatisfactionEffect" : 0
+    }
+  },
+  {
+    "Type" : "Space",
+    "Data" : {
+      "X" : 5,
+      "Y" : 6
+    }
+  },
+  {
+    "Type" : "Item",
+    "Data" : {
+      "X" : 5,
+      "Y" : 6,
+      "Name" : "Scrambled egg",
+      "Sprite" : ["S"],
+      "HealthEffect" : 1,
+      "SatisfactionEffect" : 50
+    }
+  }
+]

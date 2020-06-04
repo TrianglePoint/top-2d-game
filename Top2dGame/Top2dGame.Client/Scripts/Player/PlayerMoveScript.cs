@@ -21,7 +21,7 @@ namespace Top2dGame.Client.Scripts.Player
 		/// </summary>
 		public long InputInterval { get; set; }
 
-		public PlayerMoveScript(GameObject gameObject) : base(gameObject) { }
+		public PlayerMoveScript() : base() { }
 
 		protected override void Start()
 		{

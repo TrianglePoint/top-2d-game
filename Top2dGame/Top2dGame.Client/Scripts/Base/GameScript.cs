@@ -4,11 +4,10 @@ namespace Top2dGame.Client.Scripts.Base
 {
 	public abstract class GameScript
 	{
-		protected GameObject GameObject { get; set; }
+		public GameObject GameObject { get; set; }
 
-		protected GameScript(GameObject gameObject)
+		protected GameScript()
 		{
-			GameObject = gameObject;
 			Start();
 		}
 

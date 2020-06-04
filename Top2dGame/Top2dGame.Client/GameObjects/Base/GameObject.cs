@@ -40,10 +40,8 @@ namespace Top2dGame.Client.GameObjects.Base
 		/// </summary>
 		public IList<GameScript> Scripts { get; set; }
 
-		protected GameObject(string name, string currentMapName)
+		protected GameObject()
 		{
-			Name = name;
-			MapName = currentMapName;
 			Scripts = new List<GameScript>();
 			AddScript();
 		}

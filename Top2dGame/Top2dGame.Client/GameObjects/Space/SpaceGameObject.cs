@@ -6,13 +6,11 @@ namespace Top2dGame.Client.GameObjects.Space
 {
 	public class SpaceGameObject : GameObject
 	{
-		public SpaceGameObject(string name, string currentMapName) : base(name, currentMapName)
+		public SpaceGameObject() : base()
 		{
 			Sprite = new List<string> { ((char)SpriteEnum.Space).ToString() };
 			SetTag(TagConst.SPACE, true);
 		}
-
-		public SpaceGameObject(string currentMapName) : this("Space", currentMapName) { }
 
 		protected override void AddScript() { }
 	}

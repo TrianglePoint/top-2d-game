@@ -19,13 +19,11 @@ namespace Top2dGame.Client.GameObjects.Terrain
 		/// </summary>
 		public int ToY { get; set; }
 
-		public StairGameObject(string name, string currentMapName) : base(name, currentMapName)
+		public StairGameObject() : base()
 		{
 			Sprite = new List<string> { ((char)SpriteEnum.Stair).ToString() };
 			SetTag(TagConst.TERRAIN, true);
 		}
-
-		public StairGameObject(string currentMapName) : this("Stair", currentMapName) { }
 
 		protected override void AddScript() { }
 	}

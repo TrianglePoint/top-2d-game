@@ -6,13 +6,11 @@ namespace Top2dGame.Client.GameObjects.Terrain
 {
 	public class ExitGameObject : GameObject
 	{
-		public ExitGameObject(string name, string currentMapName) : base(name, currentMapName)
+		public ExitGameObject() : base()
 		{
 			Sprite = new List<string> { ((char)SpriteEnum.Exit).ToString() };
 			SetTag(TagConst.TERRAIN, true);
 		}
-
-		public ExitGameObject(string currentMapName) : this("Exit", currentMapName) { }
 
 		protected override void AddScript() { }
 	}

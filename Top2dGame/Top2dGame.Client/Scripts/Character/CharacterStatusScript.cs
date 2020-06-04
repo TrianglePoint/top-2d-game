@@ -33,7 +33,7 @@ namespace Top2dGame.Client.Scripts.Character
 		/// </summary>
 		public int AttackPoint { get; set; }
 
-		public CharacterStatusScript(GameObject gameObject) : base(gameObject) { }
+		public CharacterStatusScript() : base() { }
 
 		protected override void Start()
 		{

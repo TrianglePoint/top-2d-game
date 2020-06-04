@@ -7,21 +7,20 @@ namespace Top2dGame.Client.GameObjects.Player
 {
 	public class PlayerGameObject : CharacterGameObject
 	{
-		public PlayerGameObject(string name, string currentMapName) : base(name, currentMapName)
+		public PlayerGameObject() : base()
 		{
 			Sprite = new List<string> { ((char)SpriteEnum.Player).ToString() };
 			SetTag(TagConst.PLAYER, true);
 		}
-
-		public PlayerGameObject(string currentMapName) : this("Player", currentMapName) { }
 
 		protected override void AddScript()
 		{
 			// TODO Is it fine below?
 			base.AddScript();
 
-			Scripts.Add(new PlayerMoveScript(this)
+			Scripts.Add(new PlayerMoveScript()
 			{
+				GameObject = this,
 				InputInterval = 100
 			});
 		}

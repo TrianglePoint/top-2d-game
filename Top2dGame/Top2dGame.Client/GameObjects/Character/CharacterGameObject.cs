@@ -12,7 +12,7 @@ namespace Top2dGame.Client.GameObjects.Character
 		/// </summary>
 		public bool IsAlive { get; set; }
 
-		public CharacterGameObject(string name, string currentMapName) : base(name, currentMapName)
+		public CharacterGameObject() : base()
 		{
 			Sprite = new List<string> { ((char)SpriteEnum.Character).ToString() };
 			IsAlive = true;
@@ -21,7 +21,7 @@ namespace Top2dGame.Client.GameObjects.Character
 
 		protected override void AddScript()
 		{
-			Scripts.Add(new CharacterStatusScript(this));
+			Scripts.Add(new CharacterStatusScript() { GameObject = this });
 		}
 	}
 }
