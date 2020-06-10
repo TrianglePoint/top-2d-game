@@ -182,15 +182,21 @@ namespace Top2dGame.Client.Master
 				GameObject terrainGameObject = FindGameObjectAsTag(gameObjects, TagConst.TERRAIN);
 				GameObject otherGameObject = FindGameObjectAsTag(gameObjects, TagConst.CHARACTER);
 				GameObject itemGameObject = FindGameObjectAsTag(gameObjects, TagConst.ITEM);
-				
+
 				if (otherGameObject != null)
 				{
-					// Attack event
-					CharacterStatusScript characterStatus = character.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;					
-					CharacterStatusScript otherStatus = otherGameObject.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
+					// If player attack to enemy, or enemy attack to player.
+					if (character.HasTag(TagConst.PLAYER) && otherGameObject.HasTag(TagConst.ENEMY) ||
+						character.HasTag(TagConst.ENEMY) && otherGameObject.HasTag(TagConst.PLAYER))
+					{
+						// Attack event
+						CharacterStatusScript characterStatus = character.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
+						CharacterStatusScript otherStatus = otherGameObject.GetScript(typeof(CharacterStatusScript)) as CharacterStatusScript;
 
-					LogMaster.GetInstance().WriteLog(string.Format("{0} attack {1} damage to {2}.", character.Name, characterStatus.AttackPoint, otherGameObject.Name));
-					otherStatus.TakeDamage(characterStatus.AttackPoint);
+						LogMaster.GetInstance().WriteLog(string.Format("{0} attack {1} damage to {2}.", character.Name, characterStatus.AttackPoint, otherGameObject.Name));
+						otherStatus.TakeDamage(characterStatus.AttackPoint);
+					}
+
 					canPlace = false;
 				}
 				else if (itemGameObject != null)
