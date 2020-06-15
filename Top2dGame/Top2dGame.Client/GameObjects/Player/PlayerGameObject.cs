@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Top2dGame.Client.GameObjects.Character;
 using Top2dGame.Client.Scripts.Player;
+using Top2dGame.Model.Const;
 using Top2dGame.Model.Enum;
 
 namespace Top2dGame.Client.GameObjects.Player

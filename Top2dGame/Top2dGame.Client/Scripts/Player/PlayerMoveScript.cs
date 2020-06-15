@@ -51,8 +51,8 @@ namespace Top2dGame.Client.Scripts.Player
 			if (Controller.IsConnected)
 			{
 				bool inputted = false;
-				int newX = GameObject.X;
-				int newY = GameObject.Y;
+				int newX = GameObject.Position.X;
+				int newY = GameObject.Position.Y;
 
 				Controller.GetState(out State state);
 

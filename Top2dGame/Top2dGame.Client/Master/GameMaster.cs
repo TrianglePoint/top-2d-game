@@ -6,7 +6,7 @@ using Top2dGame.Client.GameObjects.Player;
 using Top2dGame.Client.GameObjects.Terrain;
 using Top2dGame.Client.Scripts.Base;
 using Top2dGame.Client.Scripts.Character;
-using Top2dGame.Model.Enum;
+using Top2dGame.Model.Const;
 
 namespace Top2dGame.Client.Master
 {
@@ -111,7 +111,7 @@ namespace Top2dGame.Client.Master
 
 			foreach (GameObject gameObject in MapMaster.GetInstance().GetCurrentMap())
 			{
-				if (gameObject.X == x && gameObject.Y == y)
+				if (gameObject.Position.X == x && gameObject.Position.Y == y)
 				{
 					gameObjects.Add(gameObject);
 				}
@@ -140,7 +140,7 @@ namespace Top2dGame.Client.Master
 
 			foreach (GameObject gameObject in mapMaster.GetMap(mapName))
 			{
-				if (gameObject.X == x && gameObject.Y == y)
+				if (gameObject.Position.X == x && gameObject.Position.Y == y)
 				{
 					gameObjects.Add(gameObject);
 				}
@@ -236,8 +236,8 @@ namespace Top2dGame.Client.Master
 
 			if (canPlace)
 			{
-				character.X = x;
-				character.Y = y;
+				character.Position.X = x;
+				character.Position.Y = y;
 
 				// Move to other game map
 				if (toMapName != "")

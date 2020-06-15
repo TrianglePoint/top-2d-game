@@ -14,16 +14,23 @@ namespace Top2dGame.Client
 		public TestThread()
 		{
 			GameMaster gameMaster = GameMaster.GetInstance();
+			int borderW = 3;
+			int borderH = 2;
+			int width = 40;
+			int height = 30;
 
 			gameMaster.GameStart();
 
 			// TODO Use other way (ex: import from file)
-			Screen.GetInstance().CreateFrame(3, 2, 29, 20, 0, 0, 5, 5, 2, 2);
+			Screen.GetInstance().CreateFrame(borderW, borderH, width, height, 0, 0, 10, 10, 2, 2);
 			// TODO Use other way (ex: import from file)
 			gameMaster.PlaceCharacter(gameMaster.Player, 2, 4);
+
 			// TODO Use other way (ex: import from file)
 			Thread = new Thread(new ThreadStart(ThreadProc));
 
+			Console.SetWindowSize(width + borderW * 2, height + borderH * 2);
+			Console.SetCursorPosition(0, 0);
 			Console.CursorVisible = false;
 		}
 

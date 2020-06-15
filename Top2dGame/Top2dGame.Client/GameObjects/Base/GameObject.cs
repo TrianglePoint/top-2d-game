@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Top2dGame.Client.Common;
 using Top2dGame.Client.Master;
 using Top2dGame.Client.Scripts.Base;
 
@@ -11,14 +12,11 @@ namespace Top2dGame.Client.GameObjects.Base
 		/// Current map name
 		/// </summary>
 		public string MapName { get; set; }
+
 		/// <summary>
-		/// Location X
+		/// Position
 		/// </summary>
-		public int X { get; set; }
-		/// <summary>
-		/// Location Y
-		/// </summary>
-		public int Y { get; set; }
+		public Position Position { get; set; }
 
 		/// <summary>
 		/// Identify tag
@@ -42,6 +40,7 @@ namespace Top2dGame.Client.GameObjects.Base
 
 		protected GameObject()
 		{
+			Position = new Position();
 			Scripts = new List<GameScript>();
 			AddScript();
 		}

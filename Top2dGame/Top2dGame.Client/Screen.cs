@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Top2dGame.Client.Common;
 using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Player;
 using Top2dGame.Client.Master;
 using Top2dGame.Client.Scripts.Character;
-using Top2dGame.Model.Enum;
+using Top2dGame.Model.Const;
 
 namespace Top2dGame.Client
 {
@@ -218,32 +219,32 @@ namespace Top2dGame.Client
 			GameMaster gameMaster = GameMaster.GetInstance();
 
 			// Screen should chase player on x-axis
-			if (gameMaster.GetDistance(X, player.X) > NotChaseWidth)
+			if (gameMaster.GetDistance(X, player.Position.X) > NotChaseWidth)
 			{
 				// Player is on the right of screen
-				if (player.X - X > 0)
+				if (player.Position.X - X > 0)
 				{
-					X = player.X - NotChaseWidth;
+					X = player.Position.X - NotChaseWidth;
 				}
 				// Player is on the left of screen
 				else
 				{
-					X = player.X + NotChaseWidth;
+					X = player.Position.X + NotChaseWidth;
 				}
 
 			}
 			// Screen should chase player on y-axis
-			if (gameMaster.GetDistance(Y, player.Y) > NotChaseHeight)
+			if (gameMaster.GetDistance(Y, player.Position.Y) > NotChaseHeight)
 			{
 				// Player is on the bottom of screen
-				if (player.Y - Y > 0)
+				if (player.Position.Y - Y > 0)
 				{
-					Y = player.Y - NotChaseWidth;
+					Y = player.Position.Y - NotChaseWidth;
 				}
 				// Player is on the top of screen
 				else
 				{
-					Y = player.Y + NotChaseWidth;
+					Y = player.Position.Y + NotChaseWidth;
 				}
 
 			}
@@ -275,6 +276,8 @@ namespace Top2dGame.Client
 		/// <param name="currentScreenInfo">Current screen info</param>
 		private void SetGameObjects(GameMaster gameMaster, int tag, IList<IList<string>> currentScreenInfo)
 		{
+			CharacterDetectScript detectScript = gameMaster.Player.GetScript(typeof(CharacterDetectScript)) as CharacterDetectScript;
+
 			// Show screen as Screen location and sight
 			for (int i = 0, x = X - SightWidth; i < SightWidth * 2 + 1; i++, x++)
 			{
@@ -282,7 +285,7 @@ namespace Top2dGame.Client
 				{
 					IList<GameObject> gameObjects = gameMaster.GetGameObjects(x, y);
 
-					if (gameObjects.Count != 0)
+					if (gameObjects.Count != 0 && detectScript.DetectedLocationList.Contains(new Position { X = x, Y = y }))
 					{
 						GameObject gameObject = gameMaster.FindGameObjectAsTag(gameObjects, tag);
 						if (gameObject != null)
@@ -325,7 +328,7 @@ namespace Top2dGame.Client
 		{
 			GameObject player = GameMaster.GetInstance().Player;
 
-			string text = string.Format("Location : {0}, {1}", player.X.ToString("00"), player.Y.ToString("00"));
+			string text = string.Format("Location : {0}, {1}", player.Position.X.ToString("00"), player.Position.Y.ToString("00"));
 
 			// TODO Get cursorPosition from other.
 			SetScreenInfo(currentScreenInfo, 1, SightHeight * 2 + 2, text);

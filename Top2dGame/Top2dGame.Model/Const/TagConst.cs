@@ -1,4 +1,4 @@
-﻿namespace Top2dGame.Model.Enum
+﻿namespace Top2dGame.Model.Const
 {
 	public static class TagConst
 	{

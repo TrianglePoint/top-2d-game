@@ -2,50 +2,64 @@
   {
     "Type" : "Space",
     "Data" : {
-      "X" : 2,
-      "Y" : 1
+      "Position" : {
+        "X" : 2,
+        "Y" : 1
+      }
     }
   },
   {
     "Type" : "Wall",
     "Data" : {
-      "X" : 2,
-      "Y" : 1
+      "Position" : {
+        "X" : 2,
+        "Y" : 1
+      }
     }
   },
   {
     "Type" : "Space",
     "Data" : {
-      "X" : 2,
-      "Y" : 4
+      "Position" : {
+        "X" : 2,
+        "Y" : 4
+      }
     }
   },
   {
     "Type" : "Space",
     "Data" : {
-      "X" : 5,
-      "Y" : 5
+      "Position" : {
+        "X" : 5,
+        "Y" : 5
+      }
     }
   },
   {
     "Type" : "Exit",
     "Data" : {
-      "X" : 5,
-      "Y" : 5
+      "Position" : {
+        "X" : 5,
+        "Y" : 5
+      }
     }
   },
   {
     "Type" : "Space",
     "Data" : {
-      "X" : 6,
-      "Y" : 6
+      "Position" : {
+        "X" : 6,
+        "Y" : 6
+      }
     }
   },
   {
     "Type" : "Stair",
     "Data" : {
-      "X" : 6,
-      "Y" : 6,
+      "Position" : {
+        "X" : 6,
+        "Y" : 6
+      },
       "ToGameMapName" : "map1",
       "ToX" : 2,
       "ToY" : 4

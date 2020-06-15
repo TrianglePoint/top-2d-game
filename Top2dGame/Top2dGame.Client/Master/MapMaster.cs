@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Top2dGame.Client.Common;
 using Top2dGame.Client.GameObjects.Base;
 using Top2dGame.Client.GameObjects.Space;
 
@@ -100,15 +101,19 @@ namespace Top2dGame.Client.Master
 			{
 				for (int y = 0; y < vertical; y++)
 				{
-					if (new System.Random().Next(10) != 0)
+					// TODO true added for sight test. remove at after.
+					if (true || new System.Random().Next(10) != 0)
 					{
 						map.Add(new SpaceGameObject()
 						{
 							MapName = mapName,
 							// TODO Create string data to const class
 							Name = "Space",
-							X = x,
-							Y = y
+							Position = new Position
+							{
+								X = x,
+								Y = y
+							}
 						});
 					}
 				}

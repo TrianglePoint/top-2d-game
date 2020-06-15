@@ -1,5 +1,5 @@
 ﻿using Top2dGame.Client.GameObjects.Character;
-using Top2dGame.Model.Enum;
+using Top2dGame.Model.Const;
 
 namespace Top2dGame.Client.GameObjects.Enemy
 {

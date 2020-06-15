@@ -144,6 +144,10 @@ namespace Top2dGame.Client.Master
 							{
 								script = JsonConvert.DeserializeObject<CharacterStatusScript>(scriptData);
 							}
+							else if ("CharacterDetectScript".Equals(scriptResource.Type))
+							{
+								script = JsonConvert.DeserializeObject<CharacterDetectScript>(scriptData);
+							}
 
 							// When valid data
 							if (script != null)
