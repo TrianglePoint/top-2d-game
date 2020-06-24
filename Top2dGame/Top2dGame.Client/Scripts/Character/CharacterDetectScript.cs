@@ -215,7 +215,7 @@ namespace Top2dGame.Client.Scripts.Character
 			// Target is bigger than Pi.
 			if (targetDirection < -(Math.PI) + validAngle)
 			{
-				targetDirection = Math.PI + Math.Abs(Math.PI - targetDirection);
+				targetDirection = Math.PI + Math.PI - Math.Abs(targetDirection);
 			}
 
 			return targetDirection >= min && targetDirection < max;
